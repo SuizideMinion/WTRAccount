@@ -18,7 +18,9 @@ class TimeManagmentController extends Controller
     {
         $activeTime = TimeTracking::where('user_id', auth()->user()->id)->where('stamped_out', 0)->first();
 
-        return view('timemanagment::index', compact('activeTime'));
+        $lastWorkings = TimeTracking::where('user_id', auth()->user()->id)->where('stamped_out', '>', 0)->orderBy('created_at', 'DESC')->take(20)->get();
+//        dd($lastWorkings);
+        return view('timemanagment::index', compact('activeTime', 'lastWorkings'));
     }
 
     /**
@@ -41,7 +43,7 @@ class TimeManagmentController extends Controller
         {
             $Time = new TimeTracking;
             $Time->user_id = auth()->user()->id;
-            $Time->stamped = time();
+            $Time->stamped = round(time() / 60) * 60;
             $Time->stamped_out = 0;
             $Time->time_worked = 0;
 
@@ -49,8 +51,8 @@ class TimeManagmentController extends Controller
         } else {
             $Time = TimeTracking::where('user_id', auth()->user()->id)->orderBy('created_at', 'DESC')->first();
 
-            $Time->stamped_out = time();
-            $Time->time_worked = time() - $Time->stamped;
+            $Time->stamped_out = round(time() / 60) * 60;
+            $Time->time_worked = round(time() / 60) * 60 - $Time->stamped;
 
             $Time->save();
         }

@@ -32,7 +32,7 @@
 
             <form method="POST" action="{{ route('timemanagment.store') }}">
                 @csrf
-                <h5 class="card-title">Eingestempelt um {{ $activeTime->created_at->format('H:i:s d.m.Y')  }}</h5>
+                <h5 class="card-title">Eingestempelt um {{ date("H:i:s",$activeTime->stamped + strtotime("1970/1/1")) }}</h5>
                 <div class="card">
                     <div class="card-body">
                         <div class="d-grid gap-2 mt-3">
@@ -45,5 +45,33 @@
             </form>
         @endif
 
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Letzte 20 Zeiterfassungen</h5>
+
+                <!-- Dark Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">von</th>
+                        <th scope="col">bis</th>
+                        <th scope="col">Zeit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($lastWorkings as $last)
+                        <tr>
+                            <th>{{ date("H:i:s",$last->stamped + strtotime("1970/1/1")) }}</th>
+                            <td>{{ date("H:i:s",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+                            <td>{{ date("H:i:s",$last->time_worked + strtotime("1970/1/1")) }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <!-- End Dark Table -->
+
+            </div>
+        </div>
     @endcan
 @endsection

@@ -33,6 +33,12 @@
                     </div>
                 </div>
 
+                @can('show.timemanagment')
+
+                    <a href="/timemanagment">zum Stempeln</a>
+
+                @endcan
+
             </div>
         </div>
 

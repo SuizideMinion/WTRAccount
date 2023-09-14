@@ -76,5 +76,37 @@
         </div>
     @endcan
 
+    @can('timeChanceAccept')
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Änderungswünsche</h5>
+
+                <!-- Dark Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">von</th>
+                        <th scope="col">bis</th>
+{{--                        <th scope="col">Zeit</th>--}}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($requestChance as $last)
+                        <tr onclick="location.href='{{ route('request.show', $last->time_id) }}'">
+                            <th>{{ $last->user->name }}</th>
+                            <th>{{ date("H:i:s",$last->stamped + strtotime("1970/1/1")) }}</th>
+                            <td>{{ date("H:i:s",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+{{--                            <td>{{ date("H:i:s",$last->time_worked + strtotime("1970/1/1")) }}</td>--}}
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <!-- End Dark Table -->
+
+            </div>
+        </div>
+    @endcan
+
 @endsection
 

@@ -19,11 +19,11 @@ class RequestTimeChance extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function time()
     {
-        return $this->hasOne(TimeTracking::class, 'time_id', 'id');
+        return $this->hasOne(TimeTracking::class, 'id', 'time_id');
     }
 }

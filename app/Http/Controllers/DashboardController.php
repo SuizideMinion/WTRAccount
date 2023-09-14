@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Modules\TimeManagment\Entities\RequestTimeChance;
 use Modules\TimeManagment\Entities\TimeTracking;
 
 class DashboardController extends Controller
@@ -13,8 +14,9 @@ class DashboardController extends Controller
     public function index()
     {
         $lastWorkings = TimeTracking::orderBy('created_at', 'DESC')->take(50)->get();
+        $requestChance = RequestTimeChance::orderBy('created_at', 'DESC')->take(50)->get();
 
-        return view('dashboard', compact('lastWorkings'));
+        return view('dashboard', compact('lastWorkings', 'requestChance'));
     }
 
     /**

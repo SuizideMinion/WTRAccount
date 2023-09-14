@@ -73,7 +73,10 @@
 
                                     <tr data-index="0">
                                         <td><a href="#">{{ $User->id }}</a></td>
-                                        <td>{{ $User->name }}</td>
+                                        <td>{{ $User->name }}
+                                            <a href="{{ route('userdata.show', $User->id) }}"><i class="bi bi-wrench"></i></a>
+                                            <a href="{{ route('userpermission.show', $User->id) }}"><i class="bi bi-folder-check"></i></a>
+                                        </td>
                                         <td></td>
                                         <td></td>
                                         <td><span class="badge bg-success">bei der Arbeit</span></td>
@@ -81,34 +84,6 @@
 
                                 @endforeach
 
-                                <tr data-index="1">
-                                    <td><a href="#">#2147</a></td>
-                                    <td>Bridie Kessler</td>
-                                    <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                    <td>$47</td>
-                                    <td><span class="badge bg-warning">Pending</span></td>
-                                </tr>
-                                <tr data-index="2">
-                                    <td><a href="#">#2049</a></td>
-                                    <td>Ashleigh Langosh</td>
-                                    <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                                    <td>$147</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
-                                <tr data-index="3">
-                                    <td><a href="#">#2644</a></td>
-                                    <td>Angus Grady</td>
-                                    <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                                    <td>$67</td>
-                                    <td><span class="badge bg-danger">Rejected</span></td>
-                                </tr>
-                                <tr data-index="4">
-                                    <td><a href="#">#2644</a></td>
-                                    <td>Raheem Lehner</td>
-                                    <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                                    <td>$165</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
                                 </tbody>
                             </table>
                         </div>

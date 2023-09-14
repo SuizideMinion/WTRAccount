@@ -1,4 +1,5 @@
 {
     "TimeManagment": true,
-    "User": true
+    "User": true,
+    "Permission": true
 }

@@ -50,15 +50,14 @@
                 <!-- End Dark Table -->
 
                 @foreach($permissions as $perm)
-                    {{--                    {{ dd(auth()->user()->userHasPermission() ) }}--}}
-                    @if( isset(auth()->user()->userHasPermission()[$perm->key]) )
+                    @if( isset($user->userHasPermission()[$perm->key]) )
                         <span class="badge bg-success">{{ $perm->key }}</span>
                     @else
                         <span class="badge bg-light text-dark">
                             <form method="post" action="{{ route('userpermission.store')}}">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="key" value="{{ $perm->key }}">
-                                <input type="hidden" name="user_id" value="{{ $id }}">
+                                <input type="hidden" name="user_id" value="{{ $user->id }}">
                                     <button style="background:none;border:none;margin:0;padding:0;cursor: pointer;"
                                             type="submit">{{ $perm->key }}</button>
                             </form>

@@ -2,6 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\Models\User;
 use App\Models\UserData;
 use App\Models\UserPermission;
 use Illuminate\Contracts\Support\Renderable;
@@ -55,8 +56,9 @@ class UserPermissionController extends Controller
     {
         $userPermissions = UserPermission::where('user_id', $id)->get();
         $permissions = Permission::get();
+        $user = User::where('id', $id)->first();
 
-        return view('user::userpermission.show', compact('userPermissions', 'permissions', 'id'));
+        return view('user::userpermission.show', compact('userPermissions', 'permissions', 'user'));
     }
 
     /**

@@ -61,7 +61,7 @@
                     </thead>
                     <tbody>
                     @foreach($lastWorkings as $last)
-                        <tr>
+                        <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
                             <th>{{ $last->user->name }}</th>
                             <th>{{ date("H:i:s",$last->stamped + strtotime("1970/1/1")) }}</th>
                             <td>{{ date("H:i:s",$last->stamped_out + strtotime("1970/1/1")) }}</td>

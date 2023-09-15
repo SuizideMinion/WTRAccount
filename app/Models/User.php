@@ -66,6 +66,6 @@ class User extends Authenticatable
 
     public function getWorktime($from, $to)
     {
-        return TimeTracking::where('user_id', auth()->user()->id)->where('stamped', '<', $to)->where('stamped', '>', $from)->sum('time_worked');
+        return TimeTracking::where('user_id', $this->id)->where('stamped', '<', $to)->where('stamped', '>', $from)->sum('time_worked');
     }
 }

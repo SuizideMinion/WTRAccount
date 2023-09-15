@@ -27,9 +27,11 @@
                                 <tr>
                                     <th><a href="#">#</a>
                                     </th>
-                                    <th width="100%"><a href="#">Arbeiter</a>
+                                    <th width="50%"><a href="#">Arbeiter</a>
                                     </th>
-                                    <th><a href="#">-</a>
+                                    <th width="25%"><a href="#">letzter Monat Stunden</a>
+                                    </th>
+                                    <th width="25%"><a href="#">diesen Monat Stunden</a>
                                     </th>
                                     <th><a href="#">Einstellungen</a>
                                     </th>
@@ -44,7 +46,16 @@
                                     <tr data-index="0">
                                         <td><a href="#">{{ $User->id }}</a></td>
                                         <td>{{ $User->name }}</td>
-                                        <td></td>
+                                        <td>
+
+                                            {{ getZeit($User->getWorktime(strtotime(date('Y-m-01') . '- 1 month'), strtotime(date('Y-m-t') . '- 1 month') + 24 * 60 * 60)) }}
+
+                                        </td>
+                                        <td>
+
+                                            {{ getZeit($User->getWorktime(strtotime(date('Y-m-01')), strtotime(date('Y-m-t')) + 24 * 60 * 60)) }}
+
+                                        </td>
                                         <td>
                                             <form method="POST" action="{{ route('timemanagment.store') }}">
                                                 @csrf

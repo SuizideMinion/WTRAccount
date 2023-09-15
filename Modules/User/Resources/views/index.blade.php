@@ -54,11 +54,14 @@
                                                 <a href="{{ route('userpermission.show', $User->id) }}"
                                                    title="UserPermissions Bearbeiten"><i
                                                         class="bi bi-folder-check"></i></a>
+                                                <a href="{{ route('statistik.show', $User->id) }}"
+                                                   title="Statistik Anschauen"><i
+                                                        class="bi bi-calendar-date"></i></a>
 
                                                 @if( $User->userAktive() == false )
                                                     <input type="hidden" name="stamped_in" value="1">
                                                     <input type="hidden" name="user_id"
-                                                           value="{{ auth()->user()->id }}">
+                                                           value="{{ $User->id }}">
                                                     <button
                                                         style="background:none;border:none;margin:0;padding:0;cursor: pointer;"
                                                         title="Einstempeln"
@@ -66,7 +69,7 @@
                                                 @else
                                                     <input type="hidden" name="stamped_in" value="0">
                                                     <input type="hidden" name="user_id"
-                                                           value="{{ auth()->user()->id }}">
+                                                           value="{{ $User->id }}">
                                                     <button
                                                         style="background:none;border:none;margin:0;padding:0;cursor: pointer;"
                                                         title="Ausstempeln"

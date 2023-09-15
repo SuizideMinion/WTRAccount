@@ -17,7 +17,7 @@
 
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Zeiterfassung</h5>
+            <h5 class="card-title">Zeiterfassung {{ ( isset($id) ? 'von '. $user->name:'' ) }}</h5>
             <div id="reportsChart" style="min-height: 365px;">
 {{--                {{dd(--}}
 {{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday" ),strtotime( "previous monday + 1 day" )) + strtotime("1970/1/1")),--}}
@@ -141,31 +141,31 @@
                                     "data": [
                                         {
                                             "x": "Montag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday" ), strtotime( "previous monday + 1 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday" ), strtotime( "previous monday + 1 day")) }}
                                         },
                                         {
                                             "x": "Dienstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 1 day" ), strtotime( "previous monday + 2 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 1 day" ), strtotime( "previous monday + 2 day")) }}
                                         },
                                         {
                                             "x": "Mittwoch",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 2 day" ), strtotime( "previous monday + 3 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 2 day" ), strtotime( "previous monday + 3 day")) }}
                                         },
                                         {
                                             "x": "Donnerstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 3 day" ), strtotime( "previous monday + 4 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 3 day" ), strtotime( "previous monday + 4 day")) }}
                                         },
                                         {
                                             "x": "Freitag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 4 day" ), strtotime( "previous monday + 5 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 4 day" ), strtotime( "previous monday + 5 day")) }}
                                         },
                                         {
                                             "x": "Samstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 5 day" ), strtotime( "previous monday + 6 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 5 day" ), strtotime( "previous monday + 6 day")) }}
                                         },
                                         {
                                             "x": "Sonntag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 6 day" ), strtotime( "previous monday + 7 day")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 6 day" ), strtotime( "previous monday + 7 day")) }}
                                         }
                                     ]
                                 },
@@ -174,31 +174,31 @@
                                     "data": [
                                         {
                                             "x": "Montag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday - 1 week" ), strtotime( "previous monday + 1 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday - 1 week" ), strtotime( "previous monday + 1 day - 1 week")) }}
                                         },
                                         {
                                             "x": "Dienstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 1 day - 1 week" ), strtotime( "previous monday + 2 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 1 day - 1 week" ), strtotime( "previous monday + 2 day - 1 week")) }}
                                         },
                                         {
                                             "x": "Mittwoch",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 2 day - 1 week" ), strtotime( "previous monday + 3 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 2 day - 1 week" ), strtotime( "previous monday + 3 day - 1 week")) }}
                                         },
                                         {
                                             "x": "Donnerstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 3 day - 1 week" ), strtotime( "previous monday + 4 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 3 day - 1 week" ), strtotime( "previous monday + 4 day - 1 week")) }}
                                         },
                                         {
                                             "x": "Freitag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 4 day - 1 week" ), strtotime( "previous monday + 5 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 4 day - 1 week" ), strtotime( "previous monday + 5 day - 1 week")) }}
                                         },
                                         {
                                             "x": "Samstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 5 day - 1 week" ), strtotime( "previous monday + 6 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 5 day - 1 week" ), strtotime( "previous monday + 6 day - 1 week")) }}
                                         },
                                         {
                                             "x": "Sonntag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 6 day - 1 week" ), strtotime( "previous monday + 7 day - 1 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 6 day - 1 week" ), strtotime( "previous monday + 7 day - 1 week")) }}
                                         }
                                     ]
                                 },
@@ -207,31 +207,31 @@
                                     "data": [
                                         {
                                             "x": "Montag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday - 2 week" ), strtotime( "previous monday + 1 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday - 2 week" ), strtotime( "previous monday + 1 day - 2 week")) }}
                                         },
                                         {
                                             "x": "Dienstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 1 day - 2 week" ), strtotime( "previous monday + 2 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 1 day - 2 week" ), strtotime( "previous monday + 2 day - 2 week")) }}
                                         },
                                         {
                                             "x": "Mittwoch",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 2 day - 2 week" ), strtotime( "previous monday + 3 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 2 day - 2 week" ), strtotime( "previous monday + 3 day - 2 week")) }}
                                         },
                                         {
                                             "x": "Donnerstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 3 day - 2 week" ), strtotime( "previous monday + 4 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 3 day - 2 week" ), strtotime( "previous monday + 4 day - 2 week")) }}
                                         },
                                         {
                                             "x": "Freitag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 4 day - 2 week" ), strtotime( "previous monday + 5 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 4 day - 2 week" ), strtotime( "previous monday + 5 day - 2 week")) }}
                                         },
                                         {
                                             "x": "Samstag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 5 day - 2 week" ), strtotime( "previous monday + 6 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 5 day - 2 week" ), strtotime( "previous monday + 6 day - 2 week")) }}
                                         },
                                         {
                                             "x": "Sonntag",
-                                            "y": {{ getTimeForStatistik(auth()->user()->id, strtotime( "previous monday + 6 day - 2 week" ), strtotime( "previous monday + 7 day - 2 week")) }}
+                                            "y": {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 6 day - 2 week" ), strtotime( "previous monday + 7 day - 2 week")) }}
                                         }
                                     ]
                                 }

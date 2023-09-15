@@ -2,6 +2,7 @@
 
 namespace Modules\TimeManagment\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -43,7 +44,9 @@ class StatistikController extends Controller
      */
     public function show($id)
     {
-        return view('timemanagment::show');
+        $user = User::whereId($id)->first();
+
+        return view('timemanagment::statistik.index', compact('id', 'user'));
     }
 
     /**

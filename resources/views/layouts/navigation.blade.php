@@ -31,6 +31,17 @@
 
         @endcan
 
+        @can('show.timemanagment')
+
+            <li class="nav-item">
+                <a class="nav-link " href="/timemanagment/statistik">
+                    <i class="bi bi-calendar-date"></i>
+                    <span>Statistik</span>
+                </a>
+            </li>
+
+        @endcan
+
         @can('show.permission')
 
             <li class="nav-item">

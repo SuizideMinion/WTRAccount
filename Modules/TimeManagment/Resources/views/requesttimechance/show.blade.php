@@ -23,38 +23,46 @@
             <table class="table">
                 <thead>
                 <tr>
-{{--                    <th scope="col">Name</th>--}}
-                    <th scope="col">von</th>
-                    <th scope="col">bis</th>
-                    <th scope="col">Zeit</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <form method="post" action="{{ route('request.update', $time->id)}}">
+                <form method="post" action="{{ route('request.update', $time->id)}}">
+                    <tr>
                         @csrf
                         @method('PUT')
-
-{{--                        <th>{{ $time->user->name }}</th>--}}
-                        <td>{{ date("d.m",$time->stamped + strtotime("1970/1/1")) }}
-                            <input type="hidden" name="stamped_date"
+                        <td>von</td>
+                        <td>
+{{--                            {{ date("d.m.Y",$time->stamped + strtotime("1970/1/1")) }}--}}
+                            <input type="text" name="stamped_date"
                                    value="{{ date("d.m.Y",$time->stamped + strtotime("1970/1/1")) }}">
                             <input type="time" name="stamped"
                                    value="{{ date("H:i:s",$time->stamped + strtotime("1970/1/1")) }}">
                         </td>
-                        <td>{{ date("d.m",$time->stamped + strtotime("1970/1/1")) }}
-                            <input type="hidden" name="stamped_out_date"
+                    </tr>
+                    <tr>
+                        <td>bis</td>
+                        <td>
+{{--                            {{ date("d.m.Y",$time->stamped_out + strtotime("1970/1/1")) }}--}}
+                            <input type="text" name="stamped_out_date"
                                    value="{{ date("d.m.Y",$time->stamped_out + strtotime("1970/1/1")) }}">
                             <input type="time" name="stamped_out"
                                    value="{{ date("H:i:s",$time->stamped_out + strtotime("1970/1/1")) }}">
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Stunden</td>
                         <td>{{ date("H:i:s",$time->time_worked + strtotime("1970/1/1")) }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
                         <td>
                             <input type="hidden" name="user_id" value="{{ $time->user_id }}">
                             <button type="submit" class="btn btn-primary">Senden</button>
                         </td>
-                    </form>
-                </tr>
+                    </tr>
+                </form>
                 </tbody>
             </table>
 
@@ -63,7 +71,6 @@
                 <table class="table">
                     <thead>
                     <tr>
-{{--                        <th scope="col">Name</th>--}}
                         <th scope="col">von</th>
                         <th scope="col">bis</th>
                         <th scope="col">Zeit</th>
@@ -73,12 +80,12 @@
                     @foreach($timeChances as $timeC)
                         <form method="post" action="{{ route('request.store', $timeC->id)}}">
                             <tr>
-{{--                                <th>{{ $time->user->name }}</th>--}}
+                                {{--                                <th>{{ $time->user->name }}</th>--}}
                                 <td>{{ date("d.m",$timeC->stamped + strtotime("1970/1/1")) }}
                                     <input type="hidden" name="stamped" value="{{ $timeC->stamped }}">
                                     {{ date("H:i:s",$timeC->stamped + strtotime("1970/1/1")) }}
                                 </td>
-                                <td>{{ date("d.m",$timeC->stamped + strtotime("1970/1/1")) }}
+                                <td>{{ date("d.m",$timeC->stamped_out + strtotime("1970/1/1")) }}
                                     <input type="hidden" name="stamped_out" value="{{$timeC->stamped_out}}">
                                     {{ date("H:i:s",$timeC->stamped_out + strtotime("1970/1/1")) }}
                                 </td>

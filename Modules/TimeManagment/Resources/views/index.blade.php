@@ -14,37 +14,26 @@
 
 @section('content')
     @can('show.timemanagment')
-        @if(!$activeTime)
-            <form method="POST" action="{{ route('timemanagment.store') }}">
-                @csrf
+        <form method="POST" action="{{ route('timemanagment.store') }}">
+            @csrf
 
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-grid gap-2 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-grid gap-2 mt-3">
+                        @if(!$activeTime)
                             <input type="hidden" name="stamped_in" value="1">
+                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <button class="btn btn-primary" type="submit">Einstempeln</button>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-        @else
-
-            <form method="POST" action="{{ route('timemanagment.store') }}">
-                @csrf
-                <h5 class="card-title">Eingestempelt um {{ date("H:i:s",$activeTime->stamped + strtotime("1970/1/1")) }}</h5>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-grid gap-2 mt-3">
+                        @else
                             <input type="hidden" name="stamped_in" value="0">
+                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <button class="btn btn-primary" type="submit">Ausstempeln</button>
-                        </div>
+                        @endif
                     </div>
                 </div>
+            </div>
 
-            </form>
-        @endif
-
+        </form>
 
         <div class="card">
             <div class="card-body">
@@ -62,9 +51,9 @@
                     <tbody>
                     @foreach($lastWorkings as $last)
                         <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
-                            <th>{{ date("H:i:s",$last->stamped + strtotime("1970/1/1")) }}</th>
-                            <td>{{ date("H:i:s",$last->stamped_out + strtotime("1970/1/1")) }}</td>
-                            <td>{{ date("H:i:s",$last->time_worked + strtotime("1970/1/1")) }}</td>
+                            <th>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</th>
+                            <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+                            <td>{{ date("H:i",$last->time_worked + strtotime("1970/1/1")) }}</td>
                         </tr>
                     @endforeach
                     </tbody>

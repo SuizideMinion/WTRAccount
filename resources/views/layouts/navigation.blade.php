@@ -14,7 +14,7 @@
             <li class="nav-item">
                 <a class="nav-link " href="/user">
                     <i class="bi bi-people"></i>
-                    <span>Mitglieder</span>
+                    <span>Arbeiter</span>
                 </a>
             </li>
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\TimeManagment\Entities\TimeTracking;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,15 @@ class User extends Authenticatable
     public function userHasPermission()
     {
         return $this->hasMany(UserPermission::class, 'user_id', 'id')->pluck('user_id', 'key');
+    }
+
+    public function userAktive()
+    {
+        return (TimeTracking::where('user_id', $this->id)->where('stamped_out', '!', 0)->first() ?? false);
+    }
+
+    public function getWorktime($from, $to)
+    {
+        return TimeTracking::where('user_id', auth()->user()->id)->where('stamped', '<', $to)->where('stamped', '>', $from)->sum('time_worked');
     }
 }

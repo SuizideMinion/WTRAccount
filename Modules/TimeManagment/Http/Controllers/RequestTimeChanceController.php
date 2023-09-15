@@ -41,7 +41,7 @@ class RequestTimeChanceController extends Controller
 
         $time->stamped = $request->stamped;
         $time->stamped_out = $request->stamped_out;
-        $time->time_worked = $request->stamped_out - $time->stamped;
+        $time->time_worked = $request->stamped_out - $request->stamped;
 
         $time->save();
 

@@ -53,7 +53,7 @@
                     </tr>
                     <tr>
                         <td>Stunden</td>
-                        <td>{{ date("H:i:s",$time->time_worked + strtotime("1970/1/1")) }}</td>
+                        <td>{{ getZeit($time->time_worked) }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -83,13 +83,13 @@
                                 {{--                                <th>{{ $time->user->name }}</th>--}}
                                 <td>{{ date("d.m",$timeC->stamped + strtotime("1970/1/1")) }}
                                     <input type="hidden" name="stamped" value="{{ $timeC->stamped }}">
-                                    {{ date("H:i:s",$timeC->stamped + strtotime("1970/1/1")) }}
+                                    {{ date("H:i",$timeC->stamped + strtotime("1970/1/1")) }}
                                 </td>
                                 <td>{{ date("d.m",$timeC->stamped_out + strtotime("1970/1/1")) }}
                                     <input type="hidden" name="stamped_out" value="{{$timeC->stamped_out}}">
-                                    {{ date("H:i:s",$timeC->stamped_out + strtotime("1970/1/1")) }}
+                                    {{ date("H:i",$timeC->stamped_out + strtotime("1970/1/1")) }}
                                 </td>
-                                <td>{{ date("H:i:s",$timeC->stamped_out - $timeC->stamped + strtotime("1970/1/1")) }}</td>
+                                <td>{{ getZeit($timeC->stamped_out - $timeC->stamped) }}</td>
                                 <td>
                                     @can('timeChanceAccept')
                                         <input type="hidden" name="user_id" value="{{ $timeC->user_id }}">

@@ -53,7 +53,7 @@
                         <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
                             <th>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</th>
                             <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
-                            <td>{{ date("H:i",$last->time_worked + strtotime("1970/1/1")) }}</td>
+                            <td>{{ getZeit($last->time_worked) }}</td>
                         </tr>
                     @endforeach
                     </tbody>

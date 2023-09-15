@@ -15,6 +15,34 @@ function getTimeForStatistik($user_id, $from, $to)
 
 }
 
+function getZeit($time, $secAnzeigen = false)
+{
+    $getHours = floor($time / 3600);
+    $getMins = floor(($time - ($getHours*3600)) / 60);
+    if( $getMins == 0 ) $getMins = '00';
+    if( $getMins == 1 ) $getMins = '01';
+    if( $getMins == 2 ) $getMins = '02';
+    if( $getMins == 3 ) $getMins = '03';
+    if( $getMins == 4 ) $getMins = '04';
+    if( $getMins == 5 ) $getMins = '05';
+    if( $getMins == 6 ) $getMins = '06';
+    if( $getMins == 7 ) $getMins = '07';
+    if( $getMins == 8 ) $getMins = '08';
+    if( $getMins == 9 ) $getMins = '09';
+    $getSecs = floor($time % 60);
+    if( $getSecs == 0 ) $getSecs = '00';
+    if( $getSecs == 1 ) $getSecs = '01';
+    if( $getSecs == 2 ) $getSecs = '02';
+    if( $getSecs == 3 ) $getSecs = '03';
+    if( $getSecs == 4 ) $getSecs = '04';
+    if( $getSecs == 5 ) $getSecs = '05';
+    if( $getSecs == 6 ) $getSecs = '06';
+    if( $getSecs == 7 ) $getSecs = '07';
+    if( $getSecs == 8 ) $getSecs = '08';
+    if( $getSecs == 9 ) $getSecs = '09';
+    return $getHours.':'.$getMins . ($secAnzeigen == true ? ':'.$getSecs:'' );
+}
+
 
 
 

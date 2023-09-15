@@ -68,6 +68,9 @@
                                                 <a href="{{ route('statistik.show', $User->id) }}"
                                                    title="Statistik Anschauen"><i
                                                         class="bi bi-calendar-date"></i></a>
+                                                <a href="{{ route('timemanagment.show', $User->id) }}"
+                                                   title="Stempelseite Anschauen"><i
+                                                        class="bi bi-clock-fill"></i></a>
 
                                                 @if( $User->userAktive() == false )
                                                     <input type="hidden" name="stamped_in" value="1">

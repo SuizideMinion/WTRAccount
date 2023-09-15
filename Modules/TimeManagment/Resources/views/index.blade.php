@@ -22,12 +22,12 @@
                     <div class="d-grid gap-2 mt-3">
                         @if(!$activeTime)
                             <input type="hidden" name="stamped_in" value="1">
-                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                            <button class="btn btn-primary" type="submit">Einstempeln</button>
+                            <input type="hidden" name="user_id" value="{{ ($id ?? auth()->user()->id) }}">
+                            <button class="btn btn-primary" type="submit">Einstempeln {{ (isset($user) ? 'für ' . $user->name:'')}}</button>
                         @else
                             <input type="hidden" name="stamped_in" value="0">
-                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                            <button class="btn btn-primary" type="submit">Ausstempeln</button>
+                            <input type="hidden" name="user_id" value="{{ ($id ?? auth()->user()->id) }}">
+                            <button class="btn btn-primary" type="submit">Ausstempeln {{ (isset($user) ? 'für ' . $user->name:'') }}</button>
                         @endif
                     </div>
                 </div>

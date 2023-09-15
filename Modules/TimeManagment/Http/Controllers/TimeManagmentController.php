@@ -2,6 +2,7 @@
 
 namespace Modules\TimeManagment\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -69,7 +70,12 @@ class TimeManagmentController extends Controller
      */
     public function show($id)
     {
-        return view('timemanagment::show');
+        $user = User::whereId($id)->first();
+        $activeTime = TimeTracking::where('user_id', $id)->where('stamped_out', 0)->first();
+
+        $lastWorkings = TimeTracking::where('user_id', $id)->where('stamped_out', '>', 0)->orderBy('created_at', 'DESC')->take(20)->get();
+//        dd($lastWorkings);
+        return view('timemanagment::index', compact('activeTime', 'lastWorkings', 'user'));
     }
 
     /**

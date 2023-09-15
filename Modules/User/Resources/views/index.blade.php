@@ -18,7 +18,7 @@
             <div class="card recent-sales overflow-auto">
 
                 <div class="card-body">
-                    <h5 class="card-title">Registriere <span>Arbeiter</span></h5>
+                    <h5 class="card-title">Registrierte <span>Arbeiter</span></h5>
 
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
                         <div class="datatable-container">

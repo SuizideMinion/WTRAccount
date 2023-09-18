@@ -17,6 +17,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::resource('user', \Modules\User\Http\Controllers\UserController::class);
-Route::resource('user/userdata', \Modules\User\Http\Controllers\UserDataController::class);
-Route::resource('user/userpermission', \Modules\User\Http\Controllers\UserPermissionController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('user', \Modules\User\Http\Controllers\UserController::class);
+    Route::resource('user/userdata', \Modules\User\Http\Controllers\UserDataController::class);
+    Route::resource('user/userpermission', \Modules\User\Http\Controllers\UserPermissionController::class);
+});

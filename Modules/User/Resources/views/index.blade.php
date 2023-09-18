@@ -44,7 +44,7 @@
                                 @foreach($Users as $User)
 
                                     <tr data-index="0">
-                                        <td><a href="#">{{ $User->id }}</a></td>
+                                        <td>{{ $User->id }}</td>
                                         <td>{{ $User->name }}</td>
                                         <td>
 

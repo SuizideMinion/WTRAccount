@@ -19,31 +19,6 @@
         <div class="card-body">
             <h5 class="card-title">Zeiterfassung {{ ( isset($id) ? 'von '. $user->name:'' ) }}</h5>
             <div id="reportsChart" style="min-height: 365px;">
-{{--                {{dd(--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday" ),strtotime( "previous monday + 1 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 1 day" ),strtotime( "previous monday + 2 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 2 day" ),strtotime( "previous monday + 3 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 3 day" ),strtotime( "previous monday + 4 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 4 day" ),strtotime( "previous monday + 5 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 5 day" ),strtotime( "previous monday + 6 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 6 day" ),strtotime( "previous monday + 7 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 7 day" ),strtotime( "previous monday + 8 day" )) + strtotime("1970/1/1")),--}}
-{{--    date("H:i:s",auth()->user()->getWorktime(strtotime( "previous monday + 8 day" ),strtotime( "previous monday + 9 day" )) + strtotime("1970/1/1")),--}}
-{{--    strtotime( "today" ) . ' --- ' . date("Y-m-d H:i:s", strtotime( "today" )),--}}
-{{--    strtotime( "tomorrow" ) . ' --- ' . date("Y-m-d H:i:s", strtotime( "tomorrow" )),--}}
-{{--    strtotime( "previous monday" ) . ' --- ' . date("Y-m-d H:i:s", strtotime( "previous monday" )),--}}
-{{--    strtotime( "previous monday + 1 day" ) . ' --- ' . date("Y-m-d H:i:s", strtotime( "previous monday + 1 day" )),--}}
-{{--    strtotime( "next monday" ) . ' --- ' . date("Y-m-d H:i:s", strtotime( "next monday" )),--}}
-
-{{--strtotime( "previous monday"),--}}
-{{--strtotime( "previous monday - 1 week"),--}}
-
-{{--strtotime( "previous monday - 1 week"),--}}
-{{--strtotime( "previous monday - 2 week"),--}}
-
-{{--strtotime( "previous monday - 2 week"),--}}
-{{--strtotime( "previous monday - 3 week"),--}}
-{{--)}}--}}
                 <script>
                     document.addEventListener("DOMContentLoaded", () => {
                         new ApexCharts(document.querySelector("#reportsChart"), { "annotations": {},

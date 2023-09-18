@@ -44,38 +44,6 @@
 
     </div>
 
-    @can('dashboard.see.Times')
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Letzte 50 Zeiterfassungen</h5>
-
-                <!-- Dark Table -->
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">von</th>
-                        <th scope="col">bis</th>
-                        <th scope="col">Zeit</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($lastWorkings as $last)
-                        <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
-                            <th>{{ $last->user->name }}</th>
-                            <td>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
-                            <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
-                            <td>{{ getZeit($last->time_worked) }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <!-- End Dark Table -->
-
-            </div>
-        </div>
-    @endcan
-
     @can('timeChanceAccept')
         <div class="card">
             <div class="card-body">
@@ -99,6 +67,38 @@
                             <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
                             <td>{{ getZeit($last->stamped_out - $last->stamped) }}</td>
 
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <!-- End Dark Table -->
+
+            </div>
+        </div>
+    @endcan
+
+    @can('dashboard.see.Times')
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Letzte 50 Zeiterfassungen</h5>
+
+                <!-- Dark Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">von</th>
+                        <th scope="col">bis</th>
+                        <th scope="col">Zeit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($lastWorkings as $last)
+                        <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
+                            <th>{{ $last->user->name }}</th>
+                            <td>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
+                            <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+                            <td>{{ getZeit($last->time_worked) }}</td>
                         </tr>
                     @endforeach
                     </tbody>

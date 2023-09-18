@@ -42,6 +42,9 @@ class TimeManagmentController extends Controller
     {
         if ( $request->stamped_in == 1 )
         {
+            $activeTime = TimeTracking::where('user_id', auth()->user()->id)->where('stamped_out', 0)->first();
+            if($activeTime) return \redirect()->back();
+
             $Time = new TimeTracking;
             $Time->user_id = $request->user_id;
             $Time->stamped = round(time() / 60) * 60 + 3600;
@@ -59,8 +62,6 @@ class TimeManagmentController extends Controller
         }
 
         return Redirect::back();
-
-        dd($request);
     }
 
     /**

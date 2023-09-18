@@ -73,6 +73,7 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
+        @include('layouts.provil')
 
       </ul>
     </nav><!-- End Icons Navigation -->

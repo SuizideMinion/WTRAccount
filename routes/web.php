@@ -18,10 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
-Route::resource('dashboard', \App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified']); //->name('dashboard') ;
+Route::resource('dashboard', \App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified']);
 
 
 Route::middleware('auth')->group(function () {

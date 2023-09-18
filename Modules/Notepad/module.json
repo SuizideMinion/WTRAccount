@@ -1,0 +1,11 @@
+{
+    "name": "Notepad",
+    "alias": "notepad",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Notepad\\Providers\\NotepadServiceProvider"
+    ],
+    "files": []
+}

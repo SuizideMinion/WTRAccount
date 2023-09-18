@@ -1,5 +1,6 @@
 {
     "TimeManagment": true,
     "User": true,
-    "Permission": true
+    "Permission": true,
+    "Notepad": true
 }

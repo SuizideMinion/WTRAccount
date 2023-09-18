@@ -43,7 +43,12 @@ function getZeit($time, $secAnzeigen = false)
     return $getHours.':'.$getMins . ($secAnzeigen == true ? ':'.$getSecs:'' );
 }
 
-
+function getShortName($name,){
+    $names = explode(' ', $name);
+    $last_name = array_pop($names);
+    $last_initial = $last_name[0];
+    return implode(' ', $names).' '.$last_initial.'.';
+}
 
 
 

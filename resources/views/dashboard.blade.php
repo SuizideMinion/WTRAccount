@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
+@endsection
 
 @section('module')
 
@@ -50,7 +53,7 @@
                 <h5 class="card-title">Änderungswünsche</h5>
 
                 <!-- Dark Table -->
-                <table class="table">
+                <table class="table datatable datatable-table">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -80,10 +83,10 @@
     @can('dashboard.see.Times')
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Letzte 50 Zeiterfassungen</h5>
+                <h5 class="card-title">Letzte Zeiterfassungen</h5>
 
                 <!-- Dark Table -->
-                <table class="table">
+                <table id="table" class="table datatable datatable-table">
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
@@ -111,3 +114,21 @@
 
 @endsection
 
+@section('scripts')
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Datatables Js-->
+    <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            // $("#table").DataTable();
+            $('#table').DataTable({
+                pageLength : 25,
+                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]]
+            })
+        });
+
+    </script>
+@endsection

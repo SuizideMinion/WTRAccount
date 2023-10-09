@@ -1,5 +1,9 @@
 @extends('timemanagment::layouts.master')
 
+@section('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
+@endsection
+
 @section('breadclumbs')
     <div class="pagetitle">
         <h1>Mitarbeiter</h1>
@@ -37,10 +41,10 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Letzte 20 Zeiterfassungen</h5>
+                <h5 class="card-title">Letzte Zeiterfassungen</h5>
 
                 <!-- Dark Table -->
-                <table class="table">
+                <table id="table" class="table datatable datatable-table">
                     <thead>
                     <tr>
                         <th scope="col">von</th>
@@ -63,4 +67,23 @@
             </div>
         </div>
     @endcan
+@endsection
+
+@section('scripts')
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Datatables Js-->
+    <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            // $("#table").DataTable();
+            $('#table').DataTable({
+                pageLength : 25,
+                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]]
+            })
+        });
+
+    </script>
 @endsection

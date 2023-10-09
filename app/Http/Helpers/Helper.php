@@ -15,7 +15,7 @@ function getTimeForStatistik($user_id, $from, $to)
 
 }
 
-function getZeit($time, $secAnzeigen = false)
+function getZeit($time, $format = 'hh:mm')
 {
     $getHours = floor($time / 3600);
     $getMins = floor(($time - ($getHours*3600)) / 60);
@@ -40,7 +40,7 @@ function getZeit($time, $secAnzeigen = false)
     if( $getSecs == 7 ) $getSecs = '07';
     if( $getSecs == 8 ) $getSecs = '08';
     if( $getSecs == 9 ) $getSecs = '09';
-    return $getHours.':'.$getMins . ($secAnzeigen == true ? ':'.$getSecs:'' );
+    return $getHours . (str_contains($format, 'mm') ? ':'.$getSecs:'') . (str_contains($format, 'ss') ? ':'.$getSecs:'');
 }
 
 function getShortName($name,){

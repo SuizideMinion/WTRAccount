@@ -99,9 +99,9 @@
                     @foreach($lastWorkings as $last)
                         <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
                             <th>{{ $last->user->name }}</th>
-                            <td>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
-                            <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
-                            <td>{{ getZeit($last->time_worked) }}</td>
+                            <td data-sort="{{ $last->stamped }}">{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
+                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+                            <td data-sort="{{ $last->time_worked }}">{{ getZeit($last->time_worked) }}</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -123,10 +123,10 @@
 
     <script type="text/javascript">
         $(function () {
-            // $("#table").DataTable();
             $('#table').DataTable({
                 pageLength : 25,
-                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]]
+                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                order: [[1, 'desc']]
             })
         });
 

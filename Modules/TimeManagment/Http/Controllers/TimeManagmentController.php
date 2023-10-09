@@ -19,7 +19,7 @@ class TimeManagmentController extends Controller
     {
         $activeTime = TimeTracking::where('user_id', auth()->user()->id)->where('stamped_out', 0)->first();
 
-        $lastWorkings = TimeTracking::where('user_id', auth()->user()->id)->where('stamped_out', '>', 0)->orderBy('stamped', 'DESC')->take(20)->get();
+        $lastWorkings = TimeTracking::where('user_id', auth()->user()->id)->where('stamped_out', '>', 0)->orderBy('stamped', 'DESC')->get();
 //        dd($lastWorkings);
         return view('timemanagment::index', compact('activeTime', 'lastWorkings'));
     }

@@ -82,7 +82,7 @@
             $('#table').DataTable({
                 pageLength : 25,
                 lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
-                order: [[1, 'desc']]
+                order: [[0, 'desc']]
             })
         });
     </script>

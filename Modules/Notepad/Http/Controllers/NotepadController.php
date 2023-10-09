@@ -85,7 +85,7 @@ class NotepadController extends Controller
 
         $Notiz->save();
 
-        return redirect()->route('notepad.show', $id);
+        return redirect()->route('notepad.show', $id)->with('message', 'Wurde Geändert!');
     }
 
     /**

@@ -29,9 +29,11 @@
                                     </th>
                                     <th width="50%"><a href="#">Arbeiter</a>
                                     </th>
-                                    <th width="25%"><a href="#">letzter Monat Stunden</a>
+                                    <th width="25%">
+                                        {{ date("F", strtotime("-1 month", time())) }}
                                     </th>
-                                    <th width="25%"><a href="#">diesen Monat Stunden</a>
+                                    <th width="25%">
+                                        {{ __( date('F') ) }}
                                     </th>
                                     <th><a href="#">Einstellungen</a>
                                     </th>

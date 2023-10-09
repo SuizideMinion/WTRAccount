@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::if('can', function ($value) {
-            return (auth()->user()->userPermission()[$value] ?? false);
+            return ( isset(auth()->user()->userPermission()[$value]) OR isset(auth()->user()->userPermission()['*']) ?? false);
         });
     }
 }

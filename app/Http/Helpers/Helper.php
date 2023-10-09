@@ -50,8 +50,33 @@ function getShortName($name,){
     return implode(' ', $names).' '.$last_initial.'.';
 }
 
+function getStatus($var) {
+    if ( $var == 1 ) return 'Eingereicht';
+    if ( $var == 2 ) return 'Angenommen';
+    if ( $var == 3 ) return 'in Arbeit';
+    if ( $var == 4 ) return 'Angebot Erstellt';
+    if ( $var == 5 ) return 'Angebot Angenommen';
+    if ( $var == 6 ) return 'Angebot Ändern';
+    if ( $var == 7 ) return 'Rechnung erstellen';
+    if ( $var == 8 ) return 'in Klärung';
+    if ( $var == 9 ) return 'Irgendwas anderes';
+    if ( $var == 100 ) return 'Abgeschlossen';
+}
 
+function getIsImage($image) {
+    $imageExtensions = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief','jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd'];
 
+    $explodeImage = explode('.', $image);
+    $extension = end($explodeImage);
+//dd($explodeImage, $extension);
+    if(in_array($extension, $imageExtensions))
+    {
+        return true;
+    }else
+    {
+        return false;
+    }
+}
 
 
 function getUserData($key, $id)

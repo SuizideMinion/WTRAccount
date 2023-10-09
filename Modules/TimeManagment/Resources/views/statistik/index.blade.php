@@ -21,7 +21,8 @@
             <div id="reportsChart" style="min-height: 365px;">
                 <script>
                     document.addEventListener("DOMContentLoaded", () => {
-                        new ApexCharts(document.querySelector("#reportsChart"), { "annotations": {},
+                        new ApexCharts(document.querySelector("#reportsChart"), {
+                            "annotations": {},
                             "chart": {
                                 "animations": {
                                     "enabled": false,
@@ -279,6 +280,45 @@
                     });
                 </script>
             </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+{{--            {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 6 day - 2 week" ) , strtotime( "previous monday + 7 day - 2 week")) }}--}}
+{{--        <table style="border: red;width: 100%;text-align: end;">--}}
+{{--            <tr>--}}
+{{--                <td>Datum</td>--}}
+{{--                <td style="width: 4%">1</td>--}}
+{{--                <td style="width: 4%">2</td>--}}
+{{--                <td style="width: 4%">3</td>--}}
+{{--                <td style="width: 4%">4</td>--}}
+{{--                <td style="width: 4%">5</td>--}}
+{{--                <td style="width: 4%">6</td>--}}
+{{--                <td style="width: 4%">7</td>--}}
+{{--                <td style="width: 4%">8</td>--}}
+{{--                <td style="width: 4%">9</td>--}}
+{{--                <td style="width: 4%">10</td>--}}
+{{--                <td style="width: 4%">11</td>--}}
+{{--                <td style="width: 4%">12</td>--}}
+{{--                <td style="width: 4%">13</td>--}}
+{{--                <td style="width: 4%">14</td>--}}
+{{--                <td style="width: 4%">15</td>--}}
+{{--                <td style="width: 4%">16</td>--}}
+{{--                <td style="width: 4%">17</td>--}}
+{{--                <td style="width: 4%">18</td>--}}
+{{--                <td style="width: 4%">19</td>--}}
+{{--                <td style="width: 4%">20</td>--}}
+{{--                <td style="width: 4%">21</td>--}}
+{{--                <td style="width: 4%">22</td>--}}
+{{--                <td style="width: 4%">23</td>--}}
+{{--                <td style="width: 4%">24</td>--}}
+{{--            </tr>--}}
+{{--            {{ dd(--}}
+{{--    getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "first day of this month + 9 hour" ) , strtotime( "first day of this month midnight + 10 hour")),--}}
+{{--     strtotime( "first day of this month + 9 hour" ) , strtotime( "first day of this month midnight + 10 hour")--}}
+{{--     )}}--}}
+{{--        </table>--}}
+
         </div>
     </div>
 

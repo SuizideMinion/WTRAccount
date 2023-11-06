@@ -284,40 +284,18 @@
     </div>
     <div class="card">
         <div class="card-body">
-{{--            {{ getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "previous monday + 6 day - 2 week" ) , strtotime( "previous monday + 7 day - 2 week")) }}--}}
-{{--        <table style="border: red;width: 100%;text-align: end;">--}}
-{{--            <tr>--}}
-{{--                <td>Datum</td>--}}
-{{--                <td style="width: 4%">1</td>--}}
-{{--                <td style="width: 4%">2</td>--}}
-{{--                <td style="width: 4%">3</td>--}}
-{{--                <td style="width: 4%">4</td>--}}
-{{--                <td style="width: 4%">5</td>--}}
-{{--                <td style="width: 4%">6</td>--}}
-{{--                <td style="width: 4%">7</td>--}}
-{{--                <td style="width: 4%">8</td>--}}
-{{--                <td style="width: 4%">9</td>--}}
-{{--                <td style="width: 4%">10</td>--}}
-{{--                <td style="width: 4%">11</td>--}}
-{{--                <td style="width: 4%">12</td>--}}
-{{--                <td style="width: 4%">13</td>--}}
-{{--                <td style="width: 4%">14</td>--}}
-{{--                <td style="width: 4%">15</td>--}}
-{{--                <td style="width: 4%">16</td>--}}
-{{--                <td style="width: 4%">17</td>--}}
-{{--                <td style="width: 4%">18</td>--}}
-{{--                <td style="width: 4%">19</td>--}}
-{{--                <td style="width: 4%">20</td>--}}
-{{--                <td style="width: 4%">21</td>--}}
-{{--                <td style="width: 4%">22</td>--}}
-{{--                <td style="width: 4%">23</td>--}}
-{{--                <td style="width: 4%">24</td>--}}
-{{--            </tr>--}}
-{{--            {{ dd(--}}
-{{--    getTimeForStatistik(($id ?? auth()->user()->id), strtotime( "first day of this month + 9 hour" ) , strtotime( "first day of this month midnight + 10 hour")),--}}
-{{--     strtotime( "first day of this month + 9 hour" ) , strtotime( "first day of this month midnight + 10 hour")--}}
-{{--     )}}--}}
-{{--        </table>--}}
+            @for($i = 0; $i <= 60; $i++)
+{{--                {{ strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00') }} -> {{ strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00') }}--}}
+                <div>{{ date('d.m.Y', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) }}</div>
+                <div class="progress m-1">
+                    @foreach($Times->where('stamped', '<', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00'))->where('stamped_out', '>', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) as $Time)
+                        @php isset($count) ? ($count == 6 ? $count = 0 : $count++):$count = 0 @endphp
+                        <div class="progress-bar progress-bar-striped bg-{{ getBootstrapColor($count) }}" role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                            {{ getZeit($Time->time_worked) }}
+                        </div>
+                    @endforeach
+                </div>
+            @endfor
 
         </div>
     </div>

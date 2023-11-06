@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\TimeManagment\Entities\TimeTracking;
 
 class StatistikController extends Controller
 {
@@ -15,7 +16,9 @@ class StatistikController extends Controller
      */
     public function index()
     {
-        return view('timemanagment::statistik.index');
+        $Times = TimeTracking::where('user_id', auth()->user()->id)->get();
+
+        return view('timemanagment::statistik.index', compact('Times'));
     }
 
     /**
@@ -44,9 +47,10 @@ class StatistikController extends Controller
      */
     public function show($id)
     {
+        $Times = TimeTracking::where('user_id', $id)->get();
         $user = User::whereId($id)->first();
 
-        return view('timemanagment::statistik.index', compact('id', 'user'));
+        return view('timemanagment::statistik.index', compact('id', 'user', 'Times'));
     }
 
     /**

@@ -60,6 +60,16 @@ function getIsImage($image) {
     }
 }
 
+function getBootstrapColor($rand)
+{
+    if($rand == 0) return 'primary';
+    if($rand == 1) return 'secondary';
+    if($rand == 2) return 'success';
+    if($rand == 3) return 'danger';
+    if($rand == 4) return 'info';
+    if($rand == 5) return 'dark';
+    if($rand == 6) return 'warning';
+}
 
 function getUserData($key, $id)
 {

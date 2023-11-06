@@ -284,7 +284,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            @for($i = 0; $i <= 60; $i++)
+            @for($i = 0; $i <= $Times->count(); $i++)
 {{--                {{ strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00') }} -> {{ strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00') }}--}}
                 <div>{{ date('d.m.Y', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) }}</div>
                 <div class="progress m-1">

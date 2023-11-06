@@ -13,23 +13,33 @@
 @endsection
 
 @section('content')
-
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Zeiterfassung {{ ( isset($id) ? 'von '. $user->name:'' ) }}</h5>
-            Diesen Monat
-            gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01')), strtotime(date('Y-m-t')) + 24 * 60 * 60)) }}
-            <br>
-            Letzten Monat
-            gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01') . '- 1 month'), strtotime(date('Y-m-t') . '- 1 month') + 24 * 60 * 60)) }}
-            <br>
-            Vorletzten Monat
-            gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01') . '- 2 month'), strtotime(date('Y-m-t') . '- 2 month') + 24 * 60 * 60)) }}
-            <br>
-            Urlaubstage genommen: {{ $Times->where('status', '3')->count() }}
-            <br>
-            Krankentage: {{ $Times->where('status', '4')->count() }}
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Zeiterfassung {{ ( isset($id) ? 'von '. $user->name:'' ) }}</h5>
+                    Diesen Monat
+                    gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01')), strtotime(date('Y-m-t')) + 24 * 60 * 60)) }}
+                    <br>
+                    Letzten Monat
+                    gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01') . '- 1 month'), strtotime(date('Y-m-t') . '- 1 month') + 24 * 60 * 60)) }}
+                    <br>
+                    Vorletzten Monat
+                    gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01') . '- 2 month'), strtotime(date('Y-m-t') . '- 2 month') + 24 * 60 * 60)) }}
+                </div>
+            </div>
         </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Jahresstatistik</h5>
+                    Urlaubstage genommen: {{ $Times->where('status', '3')->count() }}
+                    <br>
+                    Krankentage: {{ $Times->where('status', '4')->count() }}
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="card">
         <div class="card-body">
@@ -87,13 +97,13 @@
                                 {{ 'KRANK: '. getZeit($Time->time_worked) }}
                             </div>
                         @else
-{{--                            // TODO:: rechne die zwischenzeiten aus und lasse sie frei für bessere ansicht --}}
-{{--                            <div class="progress-bar progress-bar-striped bg-{{ getBootstrapColor($count) }}"--}}
-{{--                                 role="progressbar"--}}
-{{--                                 style="width: {{ (( $Time->stamped - strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) / 86400) * 100 }}%"--}}
-{{--                                 aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">--}}
-{{--                                {{ getZeit($Time->time_worked) }} {{ ( $Time->status != 1 ? ($Time->status == 2 ? 'Feiertag':($Time->status == 3 ? 'Urlaub':($Time->status == 4 ? 'Krank':'Nicht Gesetzt'))):'') }}--}}
-{{--                            </div>--}}
+                            {{--                            // TODO:: rechne die zwischenzeiten aus und lasse sie frei für bessere ansicht --}}
+                            {{--                            <div class="progress-bar progress-bar-striped bg-{{ getBootstrapColor($count) }}"--}}
+                            {{--                                 role="progressbar"--}}
+                            {{--                                 style="width: {{ (( $Time->stamped - strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) / 86400) * 100 }}%"--}}
+                            {{--                                 aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">--}}
+                            {{--                                {{ getZeit($Time->time_worked) }} {{ ( $Time->status != 1 ? ($Time->status == 2 ? 'Feiertag':($Time->status == 3 ? 'Urlaub':($Time->status == 4 ? 'Krank':'Nicht Gesetzt'))):'') }}--}}
+                            {{--                            </div>--}}
                             <div class="progress-bar progress-bar-striped bg-primary"
                                  role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
                                  aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">

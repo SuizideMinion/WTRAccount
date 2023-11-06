@@ -23,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('can', function ($value) {
             return ( isset(auth()->user()->userPermission()[$value]) OR isset(auth()->user()->userPermission()['*']) ?? false);
         });
+
+        Blade::directive('set', function($expression) {
+            list($name, $val) = explode(',', $expression);
+            return "<?php {$name} = {$val}; ?>";
+        });
     }
 }

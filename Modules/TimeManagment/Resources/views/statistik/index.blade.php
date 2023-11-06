@@ -76,8 +76,15 @@
                     @endcan
                 </div>
                 <div class="progress m-1">
-                    @foreach($Times->where('stamped', '<', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00'))->where('stamped_out', '>', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) as $Time)
-                        @php isset($count) ? ($count == 6 ? $count = 0 : $count++):$count = 0 @endphp
+                    @set($count, 0)
+                    @set($last, 0)
+                    @foreach($Times->where('stamped', '<', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00') - 3600)->where('stamped_out', '>', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00') + 3600) as $Time)
+                        {{--                        @php isset($count) ? ($count == 6 ? $count = 0 : $count++):$count = 0 @endphp--}}
+                        @php
+
+                            if(date('d.m.Y',$Time->stamped) == '23.10.2023') dd($Time);
+
+                        @endphp
                         @if($Time->status == 2)
                             <div class="progress-bar progress-bar-striped bg-info"
                                  role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
@@ -98,22 +105,29 @@
                             </div>
                         @else
                             {{--                            // TODO:: rechne die zwischenzeiten aus und lasse sie frei für bessere ansicht --}}
-                            {{--                            <div class="progress-bar progress-bar-striped bg-{{ getBootstrapColor($count) }}"--}}
-                            {{--                                 role="progressbar"--}}
-                            {{--                                 style="width: {{ (( $Time->stamped - strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) / 86400) * 100 }}%"--}}
-                            {{--                                 aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">--}}
-                            {{--                                {{ getZeit($Time->time_worked) }} {{ ( $Time->status != 1 ? ($Time->status == 2 ? 'Feiertag':($Time->status == 3 ? 'Urlaub':($Time->status == 4 ? 'Krank':'Nicht Gesetzt'))):'') }}--}}
-                            {{--                            </div>--}}
-                            <div class="progress-bar progress-bar-striped bg-primary"
-                                 role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
-                                 aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                            {{--                            @if($count == 0)--}}
+                            {{--                                <div class="progress-bar progress-bar-striped bg-light"--}}
+                            {{--                                     role="progressbar"--}}
+                            {{--                                     style="color: #1a1d20;width: {{ (( $Time->stamped - strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00') - 3600) / 86400) * 100 }}%"--}}
+                            {{--                                     aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">--}}
+                            {{--                                    {{date('H:i', strtotime(date('Y-m-d', time() - 3600 - ( 86400 * $i )) . ' 00:00:00')) }}-{{date('H:i', $Time->stamped - 3600)}}--}}
+                            {{--                                    --}}{{--                                    {{ getZeit((( $Time->stamped - strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00')) - 3600 ))  }}--}}
+                            {{--                                    --}}{{--                                {{ getZeit($Time->time_worked) }} {{ ( $Time->status != 1 ? ($Time->status == 2 ? 'Feiertag':($Time->status == 3 ? 'Urlaub':($Time->status == 4 ? 'Krank':'Nicht Gesetzt'))):'') }}--}}
+                            {{--                                </div>--}}
+                            {{--                                @set($count, $count + 1)--}}
+                            {{--                            @endif--}}
+                            <div
+                                title="{{date('H:i', $Time->stamped - 3600)}} - {{date('H:i', $Time->stamped_out - 3600)}}"
+                                class="progress-bar progress-bar-striped bg-primary"
+                                role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
+                                aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
                                 {{ getZeit($Time->time_worked) }}
                             </div>
                             <div class="progress-bar progress-bar-striped bg-light"
-                                 role="progressbar" style="width: 2%"
+                                 role="progressbar" style="width: 1%"
                                  aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
                             </div>
-
+                            @set($last, $last + $Time->time_worked)
                         @endif
                     @endforeach
                 </div>

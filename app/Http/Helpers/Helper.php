@@ -15,6 +15,11 @@ function getTimeForStatistik($user_id, $from, $to)
 
 }
 
+function Zeit()
+{
+    return time() - 3600;
+}
+
 function getZeit($time, $format = 'hh:mm')
 {
     $getHours = floor($time / 3600);

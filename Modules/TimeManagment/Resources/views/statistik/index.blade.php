@@ -79,12 +79,7 @@
                     @set($count, 0)
                     @set($last, 0)
                     @foreach($Times->where('stamped', '<', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00') - 3600)->where('stamped_out', '>', strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00') + 3600) as $Time)
-                        {{--                        @php isset($count) ? ($count == 6 ? $count = 0 : $count++):$count = 0 @endphp--}}
-                        @php
 
-                            if(date('d.m.Y',$Time->stamped) == '23.10.2023') dd($Time);
-
-                        @endphp
                         @if($Time->status == 2)
                             <div class="progress-bar progress-bar-striped bg-info"
                                  role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"

@@ -25,6 +25,10 @@
             <br>
             Vorletzten Monat
             gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01') . '- 2 month'), strtotime(date('Y-m-t') . '- 2 month') + 24 * 60 * 60)) }}
+            <br>
+            Urlaubstage genommen: {{ $Times->where('status', '3')->count() }}
+            <br>
+            Krankentage: {{ $Times->where('status', '4')->count() }}
         </div>
     </div>
     <div class="card">

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('stamped');
             $table->integer('stamped_out');
             $table->integer('time_worked');
+            $table->integer('status')->default(1);
 
             $table->timestamps();
         });

@@ -10,7 +10,7 @@ class TimeTracking extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'stamped', 'stamped_out', 'working_time'];
+    protected $fillable = ['user_id', 'stamped', 'stamped_out', 'working_time', 'status'];
 
     protected static function newFactory()
     {

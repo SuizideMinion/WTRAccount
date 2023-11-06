@@ -68,13 +68,13 @@
                             <div class="progress-bar progress-bar-striped bg-info"
                                  role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
                                  aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                {{ 'URLAUB: '. getZeit($Time->time_worked) }}
+                                {{ 'FEIERTAG: '. getZeit($Time->time_worked) }}
                             </div>
                         @elseif($Time->status == 3)
                             <div class="progress-bar progress-bar-striped bg-warning"
                                  role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
                                  aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-                                {{ 'FEIERTAG: '. getZeit($Time->time_worked) }}
+                                {{ 'URLAUB: '. getZeit($Time->time_worked) }}
                             </div>
                         @elseif($Time->status == 4)
                             <div class="progress-bar progress-bar-striped bg-danger"

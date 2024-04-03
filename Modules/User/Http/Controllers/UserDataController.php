@@ -30,11 +30,19 @@ class UserDataController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Renderable
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $userData = new UserData;
+
+        $userData->key = $request->key;
+        $userData->value = $request->value;
+        $userData->user_id = $request->user_id;
+
+        $userData->save();
+
+        return redirect()->back();
     }
 
     /**
@@ -46,7 +54,7 @@ class UserDataController extends Controller
     {
         $userDatas = UserData::where('user_id', $id)->get();
 
-        return view('user::userdata.show', compact('userDatas'));
+        return view('user::userdata.show', compact('userDatas', 'id'));
     }
 
     /**

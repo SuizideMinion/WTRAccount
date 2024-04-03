@@ -3,6 +3,7 @@
 namespace Modules\TimeManagment\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserData;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,8 +19,9 @@ class StatistikController extends Controller
     {
         $Times = TimeTracking::where('user_id', auth()->user()->id)->get();
         $user = User::whereId(auth()->user()->id)->first();
+        $userDatasUrlaubstage = UserData::where('user_id', auth()->user()->id)->get();
 
-        return view('timemanagment::statistik.index', compact('Times', 'user'));
+        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage'));
     }
 
     /**
@@ -59,9 +61,12 @@ class StatistikController extends Controller
     public function show($id)
     {
         $Times = TimeTracking::where('user_id', $id)->get();
+        $userDatasUrlaubstage = UserData::where('user_id', $id)->where('key', 'like', 'urlaubstage.%')->sum('value');
         $user = User::whereId($id)->first();
 
-        return view('timemanagment::statistik.index', compact('id', 'user', 'Times'));
+//        dd($user->userDataLike('urlaubstage.%'));
+
+        return view('timemanagment::statistik.index', compact('id', 'user', 'Times', 'userDatasUrlaubstage'));
     }
 
     /**

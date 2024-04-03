@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Jahresstatistik</h5>
-                    Urlaubstage genommen: {{ $Times->where('status', '3')->count() }}
+                    Urlaubstage genommen: {{ $Times->where('status', '3')->count() }} von {{ $userDatasUrlaubstage }}
                     <br>
                     Krankentage: {{ $Times->where('status', '4')->count() }}
                 </div>

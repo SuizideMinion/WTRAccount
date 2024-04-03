@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(UserData::class)->pluck('value', 'key');
     }
 
+    public function userDataLike($id)
+    {
+        return $this->hasMany(UserData::class)->where('key', 'like', $id . '%')->pluck('value', 'key');
+    }
+
     public function userHasPermission()
     {
         return $this->hasMany(UserPermission::class, 'user_id', 'id')->pluck('user_id', 'key');

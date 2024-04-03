@@ -54,6 +54,11 @@
                 </thead>
                 <tbody>
                 @for($i = 0; $i < 12; $i++)
+                    @if( $Times
+                                ->where('stamped_out', '<', strtotime(date('Y-m-31') . '- '. $i .'month'))
+                                ->where('stamped', '>', strtotime(date('Y-m-01') . '- '. $i .' month') - 4000)
+                                ->sum('time_worked') == 0) @break
+                    @endif
                     <tr>
                         <th scope="row">{{ date('m.Y', strtotime('first day of this month -'. $i .' Months', time())) }}</th>
                         <td>

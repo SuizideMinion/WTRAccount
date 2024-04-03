@@ -43,6 +43,48 @@
     </div>
     <div class="card">
         <div class="card-body">
+            <table class="table table-dark table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Stunden Gearbeitet</th>
+                    <th scope="col">Sollstunden</th>
+                    <th scope="col">Überstunden</th>
+                </tr>
+                </thead>
+                <tbody>
+                @for($i = 0; $i < 12; $i++)
+                    <tr>
+                        <th scope="row">{{ date('m.Y', strtotime('first day of this month -'. $i .' Months', time())) }}</th>
+                        <td>
+                            {{getZeit($Times
+                                ->where('stamped_out', '<', strtotime(date('Y-m-31') . '- '. $i .'month'))
+                                ->where('stamped', '>', strtotime(date('Y-m-01') . '- '. $i .' month') - 4000)
+                                ->sum('time_worked'))
+                                }}
+
+                        </td>
+                        <td>
+                            {{ $user->userData()['sollstunden.' . date('m.Y', strtotime('first day of this month -'. $i .' Months', time()))] ?? ($user->userData()['sollstunden'] ?? 'Fehler -> Code:SollstundenNachtragen') }}
+                        </td>
+                        <td>{{
+                            getZeit($Times
+                                ->where('stamped_out', '<', strtotime(date('Y-m-31') . '- '. $i .'month'))
+                                ->where('stamped', '>', strtotime(date('Y-m-01') . '- '. $i .' month') - 4000)
+                                ->sum('time_worked')
+                                -
+                                ($user->userData()['sollstunden.' . date('m.Y', strtotime('first day of this month -'. $i .' Months', time()))]
+                                ?? ($user->userData()['sollstunden'] ?? 0)) * 60 * 60)
+}}</td>
+                    </tr>
+                @endfor
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
             @for($i = 0; $i <= $Times->count(); $i++)
                 {{--                {{ strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 00:00:00') }} -> {{ strtotime(date('Y-m-d', time() - ( 86400 * $i )) . ' 24:00:00') }}--}}
                 <div class="d-flex">
@@ -112,10 +154,10 @@
                             {{--                                @set($count, $count + 1)--}}
                             {{--                            @endif--}}
                             <div
-                                title="{{date('H:i', $Time->stamped - 3600)}} - {{date('H:i', $Time->stamped_out - 3600)}}"
-                                class="progress-bar progress-bar-striped bg-primary"
-                                role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
-                                aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                    title="{{date('H:i', $Time->stamped - 3600)}} - {{date('H:i', $Time->stamped_out - 3600)}}"
+                                    class="progress-bar progress-bar-striped bg-primary"
+                                    role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
+                                    aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
                                 {{ getZeit($Time->time_worked) }}
                             </div>
                             <div class="progress-bar progress-bar-striped bg-light"

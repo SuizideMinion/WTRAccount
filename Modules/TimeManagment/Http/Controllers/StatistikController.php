@@ -19,7 +19,7 @@ class StatistikController extends Controller
     {
         $Times = TimeTracking::where('user_id', auth()->user()->id)->get();
         $user = User::whereId(auth()->user()->id)->first();
-        $userDatasUrlaubstage = UserData::where('user_id', auth()->user()->id)->get();
+        $userDatasUrlaubstage = UserData::where('user_id', auth()->user()->id)->where('key', 'like', 'urlaubstage.%')->sum('value');
 
         return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage'));
     }

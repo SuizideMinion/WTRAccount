@@ -21,10 +21,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::if('can', function ($value) {
-            return ( isset(auth()->user()->userPermission()[$value]) OR isset(auth()->user()->userPermission()['*']) ?? false);
+            if (auth()->check()) {
+                return (isset(auth()->user()->userPermission()[$value]) or isset(auth()->user()->userPermission()['*']) ?? false);
+            } else {
+                return false;
+            }
         });
 
-        Blade::directive('set', function($expression) {
+        Blade::directive('set', function ($expression) {
             list($name, $val) = explode(',', $expression);
             return "<?php {$name} = {$val}; ?>";
         });

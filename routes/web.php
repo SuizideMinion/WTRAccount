@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,8 +19,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/'); // oder zu einer anderen Seite umleiten
+})->name('logout');
+
 Route::resource('dashboard', \App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified']);
 
+Route::get('json', [\App\Http\Controllers\JSONController::class, 'json'])->name('json');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

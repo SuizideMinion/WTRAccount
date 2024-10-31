@@ -26,6 +26,9 @@
                     <br>
                     Vorletzten Monat
                     gearbeitet: {{ getZeit($user->getWorktime(strtotime(date('Y-m-01') . '- 2 month'), strtotime(date('Y-m-t') . '- 2 month') + 24 * 60 * 60)) }}
+                    <br>
+                    <p id="totalOvertime">Gesamte Überstunden: <span>0:00</span></p>
+                    (das aktuelle Monat wird nicht eingerechnet)
                 </div>
             </div>
         </div>
@@ -43,7 +46,7 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table class="table table-dark table-sm">
+            <table class="table table-dark table-sm" id="timeTable">
                 <thead>
                 <tr>
                     <th scope="col">Date</th>
@@ -177,5 +180,30 @@
 
         </div>
     </div>
+    <script>
+        function calculateTotalOvertime() {
+            const rows = document.querySelectorAll('#timeTable tbody tr');
+            let totalMinutes = 0;
 
+            // Start from the second row (index 1)
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip the first row
+
+                const overtimeText = row.cells[3].textContent.trim();
+                const isNegative = overtimeText.startsWith('-');
+                const [hours, minutes] = overtimeText.replace('-', '').split(':').map(Number);
+
+                let totalOvertimeMinutes = (hours * 60) + minutes;
+                totalMinutes += isNegative ? -totalOvertimeMinutes : totalOvertimeMinutes;
+            });
+
+            const finalHours = Math.floor(Math.abs(totalMinutes) / 60);
+            const finalMinutes = Math.abs(totalMinutes) % 60;
+            const formattedTime = `${totalMinutes < 0 ? '-' : ''}${finalHours}:${String(finalMinutes).padStart(2, '0')}`;
+
+            document.getElementById('totalOvertime').querySelector('span').textContent = formattedTime;
+        }
+
+        calculateTotalOvertime();
+    </script>
 @endsection

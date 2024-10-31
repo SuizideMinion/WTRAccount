@@ -19,9 +19,10 @@ class StatistikController extends Controller
     {
         $Times = TimeTracking::where('user_id', auth()->user()->id)->get();
         $user = User::whereId(auth()->user()->id)->first();
+        $userData = UserData::where('user_id', auth()->user()->id)->get()->pluck('value', 'key');
         $userDatasUrlaubstage = UserData::where('user_id', auth()->user()->id)->where('key', 'like', 'urlaubstage.%')->sum('value');
 
-        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage'));
+        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage', 'userData'));
     }
 
     /**
@@ -61,12 +62,13 @@ class StatistikController extends Controller
     public function show($id)
     {
         $Times = TimeTracking::where('user_id', $id)->get();
+        $userData = UserData::where('user_id', $id)->get()->pluck('value', 'key');
         $userDatasUrlaubstage = UserData::where('user_id', $id)->where('key', 'like', 'urlaubstage.%')->sum('value');
         $user = User::whereId($id)->first();
 
 //        dd($user->userDataLike('urlaubstage.%'));
 
-        return view('timemanagment::statistik.index', compact('id', 'user', 'Times', 'userDatasUrlaubstage'));
+        return view('timemanagment::statistik.index', compact('id', 'user', 'Times', 'userDatasUrlaubstage', 'userData'));
     }
 
     /**

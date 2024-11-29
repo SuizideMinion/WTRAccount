@@ -21,9 +21,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::if('can', function ($value) {
-            $user = auth()->user();
 
             if (auth()->check()) {
+                $user = auth()->user();
                 if (session()->has('user_permissions')) {
                     $permissions = session('user_permissions');
                 } else {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TimeTrackingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/time-tracking', [TimeTrackingController::class, 'showTimeTracking'])->name('time-tracking');
+    Route::get('/time-work', [TimeTrackingController::class, 'showUserTimeEntries'])->name('show-user-hours');
+    Route::post('/clock-in', [TimeTrackingController::class, 'clockIn']);
+    Route::post('/clock-out', [TimeTrackingController::class, 'clockOut']);
+    Route::post('/request-leave', [TimeTrackingController::class, 'requestLeave']);
+    Route::get('api/user/{userId}/summary', [TimeTrackingController::class, 'getSummary']);
+    Route::get('api/user/{userId}/entries', [TimeTrackingController::class, 'getEntries']);
+    Route::delete('api/entries/{entryId}', [TimeTrackingController::class, 'deleteEntry']);
+    Route::post('api/user/pause', [TimeTrackingController::class, 'pause']);
+    Route::post('api/user/resume', [TimeTrackingController::class, 'resume']);
+});
 
 Route::get('/logout', function () {
     Auth::logout();

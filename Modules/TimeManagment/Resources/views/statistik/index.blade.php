@@ -74,7 +74,7 @@
 
                         </td>
                         <td>
-                            {{ $userData['sollstunden.' . date('m.Y', strtotime('first day of this month -'. $i .' Months', time()))] ?? ($userData['sollstunden'] ?? 'Fehler -> Code:SollstundenNachtragen') }}
+                            {{ $user->userData()['sollstunden.' . date('m.Y', strtotime('first day of this month -'. $i .' Months', time()))] ?? ($user->userData()['sollstunden'] ?? 'Fehler -> Code:SollstundenNachtragen') }}
                         </td>
                         <td>{{
                             getZeit($Times
@@ -82,17 +82,17 @@
                                 ->where('stamped', '>', strtotime(date('Y-m-01') . '- '. $i .' month') - 4000)
                                 ->sum('time_worked')
                                 -
-                                ($userData['sollstunden.' . date('m.Y', strtotime('first day of this month -'. $i .' Months', time()))]
-                                ?? ($userData['sollstunden'] ?? 0)) * 60 * 60) }}
+                                ($user->userData()['sollstunden.' . date('m.Y', strtotime('first day of this month -'. $i .' Months', time()))]
+                                ?? ($user->userData()['sollstunden'] ?? 0)) * 60 * 60) }}
                         </td>
                     </tr>
                 @endfor
-                @if(isset($userData['ueberStunden']))
+                @if(isset($user->userData()['ueberStunden']))
                     <tr>
                         <td></td>
                         <td>Übertrag:</td>
                         <td></td>
-                        <td>{{ getZeit($userData['ueberStunden']) }}</td>
+                        <td>{{ getZeit($user->userData()['ueberStunden']) }}</td>
                     </tr>
                 @endif
                 </tbody>

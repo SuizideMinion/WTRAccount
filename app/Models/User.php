@@ -74,4 +74,13 @@ class User extends Authenticatable
     {
         return TimeTracking::where('user_id', $this->id)->where('stamped', '<', $to)->where('stamped', '>', $from)->sum('time_worked');
     }
+    public function timeEntries()
+    {
+        return $this->hasMany(TimeEntry::class);
+    }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
 }

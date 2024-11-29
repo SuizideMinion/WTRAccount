@@ -64,7 +64,7 @@
     <section class="section dashboard">
 
       @yield('module')
-
+        @yield('contend')
     </section>
 
   </main><!-- End #main -->

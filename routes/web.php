@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/logout', function () {
     Auth::logout();
+    Session::flush();
     return redirect('/'); // oder zu einer anderen Seite umleiten
 })->name('logout');
 

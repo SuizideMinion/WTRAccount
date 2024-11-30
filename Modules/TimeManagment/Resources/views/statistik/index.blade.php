@@ -62,27 +62,34 @@
                 </tr>
                 </thead>
                 <tbody>
-                @for($i = 0; $i < 99; $i++)
-                    @php
-                        $start = monthBoundary($i);
-                        $end = monthBoundary($i, 'end') + 24 * 60 * 60;
-                        $workTime = $Times->where('stamped', '>=', $start)
-                                          ->where('stamped_out', '<', $end)
-                                          ->sum('time_worked');
-                        $sollstunden = $user->userData()['sollstunden.' . date('m.Y', $start)] ?? ($user->userData()['sollstunden'] ?? 160);
-                    @endphp
+                @php
+                    $i = 0; // Initialisieren des Monatszählers
+                    $firstMonthTimestamp = $Times->min('stamped'); // Erste Zeiterfassung im Überblick
+                    $firstMonth = $firstMonthTimestamp ? strtotime(date('Y-m-01', $firstMonthTimestamp)) : time();
+                    $currentMonth = strtotime(date('Y-m-01')); // Aktueller Monat
+                @endphp
+                @while($firstMonth <= $currentMonth) <!-- Iterieren bis zum aktuellen Monat -->
+                @php
+                    $start = strtotime("-$i month", $currentMonth);
+                    $end = strtotime("+1 month", $start);
+                    $workTime = $Times->where('stamped', '>=', $start)
+                                      ->where('stamped_out', '<', $end)
+                                      ->sum('time_worked');
+                    $sollstunden = $user->userData()['sollstunden.' . date('m.Y', $start)] ?? ($user->userData()['sollstunden'] ?? 160);
+                @endphp
 
-                    @if($workTime == 0)
-                        @break
-                    @endif
+                <tr>
+                    <th scope="row">{{ date('m.Y', $start) }}</th>
+                    <td>{{ getZeit($workTime) }}</td>
+                    <td>{{ $sollstunden }}</td>
+                    <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
+                </tr>
 
-                    <tr>
-                        <th scope="row">{{ date('m.Y', $start) }}</th>
-                        <td>{{ getZeit($workTime) }}</td>
-                        <td>{{ $sollstunden }}</td>
-                        <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
-                    </tr>
-                @endfor
+                @php
+                    $i++; // Erhöhen Sie den Monatszähler
+                    $firstMonth = strtotime("+1 month", $firstMonth); // Nächster Monat
+                @endphp
+                @endwhile
                 @if(isset($user->userData()['ueberStunden']))
                     <tr>
                         <td></td>

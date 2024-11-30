@@ -41,5 +41,10 @@ class AppServiceProvider extends ServiceProvider
             list($name, $val) = explode(',', $expression);
             return "<?php {$name} = {$val}; ?>";
         });
+
+        Blade::directive('setArray', function ($expression) {
+            // Lädt den kompletten Ausdruck und platziert ihn direkt in PHP-Code
+            return "<?php \$array = {$expression}; ?>";
+        });
     }
 }

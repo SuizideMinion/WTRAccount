@@ -14,11 +14,9 @@
 
 @section('content')
     @php
-        if (!function_exists('monthBoundary')) {
-            function monthBoundary($monthsAgo = 0, $type = 'start') {
-                $format = $type === 'end' ? 'Y-m-t' : 'Y-m-01';
-                return strtotime(date($format) . ' - ' . $monthsAgo . ' month');
-            }
+        function monthBoundary($monthsAgo = 0, $type = 'start') {
+            $format = $type === 'end' ? 'Y-m-t' : 'Y-m-01';
+            return strtotime(date($format) . ' - ' . $monthsAgo . ' month');
         }
     @endphp
 
@@ -28,7 +26,12 @@
                 <div class="card-body">
                     <h5 class="card-title">Zeiterfassung {{ isset($id) ? 'von '. $user->name : '' }}</h5>
                     @foreach([0 => 'Diesen Monat', 1 => 'Letzten Monat', 2 => 'Vorletzten Monat'] as $offset => $label)
-                        {{ $label }} gearbeitet: {{ getZeit($user->getWorktime(monthBoundary($offset), monthBoundary($offset, 'end') + 24 * 60 * 60)) }}<br>
+                        @php
+                            $start = monthBoundary($offset);
+                            $end = monthBoundary($offset, 'end') + 24 * 60 * 60;
+                            $arbeitZeit = $Times->where('stamped', '>=', $start)->where('stamped_out', '<', $end)->sum('time_worked');
+                        @endphp
+                        {{ $label }} gearbeitet: {{ getZeit($arbeitZeit) }}<br>
                     @endforeach
                     <p id="totalOvertime">Gesamte Überstunden: <span>0:00</span></p>
                     (das aktuelle Monat wird nicht eingerechnet)
@@ -39,7 +42,8 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Jahresstatistik</h5>
-                    Urlaubstage genommen: {{ $Times->where('status', '3')->count() }} von {{ $userDatasUrlaubstage }}<br>
+                    Urlaubstage genommen: {{ $Times->where('status', '3')->count() }} von {{ $userDatasUrlaubstage }}
+                    <br>
                     Krankentage: {{ $Times->where('status', '4')->count() }}
                 </div>
             </div>
@@ -60,16 +64,20 @@
                 <tbody>
                 @for($i = 0; $i < 99; $i++)
                     @php
-                        $workTime = $Times->where('stamped_out', '<', monthBoundary($i, 'end'))
-                                          ->where('stamped', '>', monthBoundary($i) - 4000)
+                        $start = monthBoundary($i);
+                        $end = monthBoundary($i, 'end') + 24 * 60 * 60;
+                        $workTime = $Times->where('stamped', '>=', $start)
+                                          ->where('stamped_out', '<', $end)
                                           ->sum('time_worked');
-                        $sollstunden = $user->userData()['sollstunden.' . date('m.Y', monthBoundary($i))] ?? ($user->userData()['sollstunden'] ?? 160);
+                        $sollstunden = $user->userData()['sollstunden.' . date('m.Y', $start)] ?? ($user->userData()['sollstunden'] ?? 160);
                     @endphp
 
-                    @if($workTime == 0) @break @endif
+                    @if($workTime == 0)
+                        @break
+                    @endif
 
                     <tr>
-                        <th scope="row">{{ date('m.Y', monthBoundary($i)) }}</th>
+                        <th scope="row">{{ date('m.Y', $start) }}</th>
                         <td>{{ getZeit($workTime) }}</td>
                         <td>{{ $sollstunden }}</td>
                         <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
@@ -92,11 +100,12 @@
         <div class="card-body">
             @php
                 $cssClasses = [
-                0 => 'bg-info',
-                1 => 'bg-info',
+                0 => 'bg-primary',
+                1 => 'bg-primary',
                 2 => 'bg-info',
                 3 => 'bg-warning',
                 4 => 'bg-danger',
+                5 => 'bg-info',
                 ];
 
                 $labels = [
@@ -105,6 +114,7 @@
                 2 => 'FEIERTAG',
                 3 => 'URLAUB',
                 4 => 'KRANK',
+                5 => 'ÜB Abbau',
                 ];
             @endphp
 
@@ -113,7 +123,8 @@
                     <div>{{ date('d.m.Y', strtotime("-{$i} days")) }}</div>
                     @can('timetracking_setany')
                         <div style="margin-left: auto">
-                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}" onsubmit="submitForm(event, this)">
+                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}"
+                                  onsubmit="submitForm(event, this)">
                                 @csrf
                                 <input type="hidden" name="day" value="{{ strtotime("-{$i} days 00:00:00") }}">
                                 <input type="hidden" name="user_id" value="{{($id ?? auth()->user()->id)}}">
@@ -123,6 +134,7 @@
                                     <option value="2">Feiertag</option>
                                     <option value="3">Urlaub</option>
                                     <option value="4">Krank</option>
+                                    <option value="5">ÜB ABBAU</option>
                                 </select>
                                 <select class="form-select form-select-sm" name="time" required>
                                     <option selected disabled>Zeit</option>
@@ -143,9 +155,10 @@
                         <div class="progress-bar progress-bar-striped {{ $cssClasses[$Time->status] ?? 'bg-primary' }}"
                              role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
                              aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"
-                             title="{{ $labels[$Time->status] ?? date('H:i', $Time->stamped) . ' - ' . date('H:i', $Time->stamped_out) }}">
+                             title="{{ $labels[$Time->status] .' '. date('H:i', $Time->stamped) . ' - ' . date('H:i', $Time->stamped_out) .' ['. $Time->id .']' }}">
                             {{ ($labels[$Time->status] ?? '') . ($labels[$Time->status] ? ': ' : '') . getZeit($Time->time_worked) }}
                         </div>
+                        <div class="progress-bar progress-bar-striped bg-light" role="progressbar" style="width: 1%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
                     @endforeach
                 </div>
             @endfor
@@ -177,9 +190,11 @@
 
                         // Bestimmen der passenden CSS-Klasse basierend auf dem Status
                         const statusClasses = {
+                            1: 'bg-info',     // Beispiel: Normal
                             2: 'bg-info',     // Beispiel: Feiertag
                             3: 'bg-warning',  // Beispiel: Urlaub
-                            4: 'bg-danger'    // Beispiel: Krank
+                            4: 'bg-danger',    // Beispiel: Krank
+                            5: 'bg-info'    // Beispiel: ÜB Abbabu
                             // Weitere Klassenzuordnungen können hier hinzugefügt werden
                         };
                         const cssClass = statusClasses[data.status] || 'bg-primary';

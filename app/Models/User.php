@@ -55,6 +55,12 @@ class User extends Authenticatable
         return $this->hasMany(UserData::class)->pluck('value', 'key');
     }
 
+    // Neue Methode für den Controller
+    public function userDataRelation()
+    {
+        return $this->hasMany(UserData::class);
+    }
+
     public function userDataLike($id)
     {
         return $this->hasMany(UserData::class)->where('key', 'like', $id . '%')->pluck('value', 'key');

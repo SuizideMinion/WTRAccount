@@ -116,6 +116,10 @@ class RequestTimeChanceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $timeChance = RequestTimeChance::findOrFail($id);
+        dd($id, $timeChance);
+        $timeChance->delete();
+
+        return redirect()->back()->withErrors('Eintrag erfolgreich gelöscht');
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
+use Modules\TimeManagment\Entities\RequestTimeChance;
 use Modules\TimeManagment\Entities\TimeTracking;
 
 class TimeManagmentController extends Controller
@@ -100,13 +101,11 @@ class TimeManagmentController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        //
+        TimeTracking::where('id', $id)->delete();
+        RequestTimeChance::where('time_id', $id)->delete();
+
+        return Redirect::route('timemanagment.index');
     }
 }

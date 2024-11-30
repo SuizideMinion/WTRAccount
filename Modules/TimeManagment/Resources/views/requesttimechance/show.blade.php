@@ -63,6 +63,11 @@
                         </td>
                     </tr>
                 </form>
+                <form method="post" action="{{ route('timemanagment.destroy', $time->id) }}" onsubmit="return confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Löschen</button>
+                </form>
                 </tbody>
             </table>
 
@@ -98,6 +103,13 @@
                                         <button type="submit" class="btn btn-primary">Senden</button>
                                     @endcan
                                 </td>
+{{--                                <td>--}}
+{{--                                    <form method="post" action="{{ route('request.destroy', $timeC->id) }}" onsubmit="return confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?');">--}}
+{{--                                        @csrf--}}
+{{--                                        @method('DELETE')--}}
+{{--                                        <button type="submit" class="btn btn-danger">Löschen</button>--}}
+{{--                                    </form>--}}
+{{--                                </td>--}}
                             </tr>
                         </form>
                     @endforeach

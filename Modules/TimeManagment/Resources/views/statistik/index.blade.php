@@ -62,34 +62,27 @@
                 </tr>
                 </thead>
                 <tbody>
-                @php
-                    $i = 0; // Initialisieren des Monatszählers
-                    $firstMonthTimestamp = $Times->min('stamped'); // Erste Zeiterfassung im Überblick
-                    $firstMonth = $firstMonthTimestamp ? strtotime(date('Y-m-01', $firstMonthTimestamp)) : time();
-                    $currentMonth = strtotime(date('Y-m-01')); // Aktueller Monat
-                @endphp
-                @while($firstMonth <= $currentMonth) <!-- Iterieren bis zum aktuellen Monat -->
-                @php
-                    $start = strtotime("-$i month", $currentMonth);
-                    $end = strtotime("+1 month", $start);
-                    $workTime = $Times->where('stamped', '>=', $start)
-                                      ->where('stamped_out', '<', $end)
-                                      ->sum('time_worked');
-                    $sollstunden = $user->userData()['sollstunden.' . date('m.Y', $start)] ?? ($user->userData()['sollstunden'] ?? 160);
-                @endphp
+                @for($i = 0; $i < 99; $i++)
+                    @php
+                        $start = monthBoundary($i);
+                        $end = monthBoundary($i, 'end') + 24 * 60 * 60;
+                        $workTime = $Times->where('stamped', '>=', $start)
+                                          ->where('stamped_out', '<', $end)
+                                          ->sum('time_worked');
+                        $sollstunden = $user->userData()['sollstunden.' . date('m.Y', $start)] ?? ($user->userData()['sollstunden'] ?? 160);
+                    @endphp
 
-                <tr>
-                    <th scope="row">{{ date('m.Y', $start) }}</th>
-                    <td>{{ getZeit($workTime) }}</td>
-                    <td>{{ $sollstunden }}</td>
-                    <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
-                </tr>
+                    @if($workTime == 0)
+                        @break
+                    @endif
 
-                @php
-                    $i++; // Erhöhen Sie den Monatszähler
-                    $firstMonth = strtotime("+1 month", $firstMonth); // Nächster Monat
-                @endphp
-                @endwhile
+                    <tr>
+                        <th scope="row">{{ date('m.Y', $start) }}</th>
+                        <td>{{ getZeit($workTime) }}</td>
+                        <td>{{ $sollstunden }}</td>
+                        <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
+                    </tr>
+                @endfor
                 @if(isset($user->userData()['ueberStunden']))
                     <tr>
                         <td></td>
@@ -106,71 +99,123 @@
     <div class="card">
         <div class="card-body">
             @php
-                $cssClasses = [
-                0 => 'bg-primary',
-                1 => 'bg-primary',
-                2 => 'bg-info',
-                3 => 'bg-warning',
-                4 => 'bg-danger',
-                5 => 'bg-info',
-                ];
+                $currentDate = new DateTime();
+                $monthsData = [];
 
-                $labels = [
-                0 => '',
-                1 => '',
-                2 => 'FEIERTAG',
-                3 => 'URLAUB',
-                4 => 'KRANK',
-                5 => 'ÜB Abbau',
-                ];
+                // Setze das Datum auf den letzten Tag des aktuellen Monats, um die Rückwärtsberechnung zu erleichtern
+                $currentDate->setDate((int) $currentDate->format('Y'), (int) $currentDate->format('m'), 1);
+
+                for ($i = 0; $i < 12; $i++) {
+                    // In jedem Schleifenlauf gehen wir einen Monat zurück
+                    $adjustedDate = (clone $currentDate)->modify('-' . $i . ' months');
+                    $monthNameYear = $adjustedDate->format('M y');
+
+                    $startOfMonth = (clone $adjustedDate)->modify('first day of this month')->setTime(0, 0, 0);
+                    $endOfMonth = (clone $adjustedDate)->modify('last day of this month')->setTime(23, 59, 59);
+
+                    $monthTimestamps = new DatePeriod(
+                        $startOfMonth,
+                        new DateInterval('P1D'),
+                        $endOfMonth->modify('+1 day')
+                    );
+
+                    $days = [];
+                    foreach ($monthTimestamps as $date) {
+                        $timestamp = $date->getTimestamp();
+                        $days[$timestamp] = $Times->filter(function ($time) use ($timestamp) {
+                            return date('Y-m-d', $time->stamped) == date('Y-m-d', $timestamp);
+                        });
+                    }
+
+                    $monthsData[$monthNameYear] = $days;
+                }
             @endphp
 
-            @for ($i = 0; $i <= $Times->count(); $i++)
-                <div class="d-flex">
-                    <div>{{ date('d.m.Y', strtotime("-{$i} days")) }}</div>
-                    @can('timetracking_setany')
-                        <div style="margin-left: auto">
-                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}"
-                                  onsubmit="submitForm(event, this)">
-                                @csrf
-                                <input type="hidden" name="day" value="{{ strtotime("-{$i} days 00:00:00") }}">
-                                <input type="hidden" name="user_id" value="{{($id ?? auth()->user()->id)}}">
-                                <select class="form-select form-select-sm" name="status" required>
-                                    <option selected disabled>Status</option>
-                                    <option value="1">Normal</option>
-                                    <option value="2">Feiertag</option>
-                                    <option value="3">Urlaub</option>
-                                    <option value="4">Krank</option>
-                                    <option value="5">ÜB ABBAU</option>
-                                </select>
-                                <select class="form-select form-select-sm" name="time" required>
-                                    <option selected disabled>Zeit</option>
-                                    @for ($hours = 0; $hours <= 24; $hours++)
-                                        @php $seconds = $hours * 3600; @endphp
-                                        <option value="{{ $seconds }}">{{ $hours }}std</option>
-                                    @endfor
-                                </select>
-                                <button type="submit" class="btn btn-primary btn-sm">Send</button>
-                            </form>
-                        </div>
-                    @endcan
-                </div>
+            <ul class="nav nav-tabs" id="monthTabs" role="tablist">
+                @foreach($monthsData as $monthYear => $days)
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{ $loop->first ? 'active' : '' }}"
+                                id="tab-{{ str_replace(' ', '-', $monthYear) }}"
+                                data-bs-toggle="tab" data-bs-target="#{{ str_replace(' ', '-', $monthYear) }}"
+                                type="button"
+                                role="tab" aria-controls="{{ str_replace(' ', '-', $monthYear) }}"
+                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                            {{ $monthYear }}
+                        </button>
+                    </li>
+                @endforeach
+            </ul>
 
-                <div class="progress m-1" id="progress-{{ strtotime("-{$i} days 00:00:00") }}">
-                    @foreach($Times->where('stamped', '<', strtotime("-{$i} days 24:00:00"))
-                                    ->where('stamped_out', '>', strtotime("-{$i} days 00:00:00")) as $Time)
-                        <div class="progress-bar progress-bar-striped {{ $cssClasses[$Time->status] ?? 'bg-primary' }}"
-                             role="progressbar" style="width: {{ ($Time->time_worked / 86400) * 100 }}%"
-                             aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"
-                             title="{{ $labels[$Time->status] .' '. date('H:i', $Time->stamped) . ' - ' . date('H:i', $Time->stamped_out) .' ['. $Time->id .']' }}">
-                            {{ ($labels[$Time->status] ?? '') . ($labels[$Time->status] ? ': ' : '') . getZeit($Time->time_worked) }}
+            <div class="tab-content" id="myTabContent">
+                @foreach($monthsData as $monthYear => $days)
+                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                             id="{{ str_replace(' ', '-', $monthYear) }}"
+                             role="tabpanel" aria-labelledby="tab-{{ str_replace(' ', '-', $monthYear) }}">
+
+                            @foreach($days as $timestamp => $times)
+                                <div class="d-flex">
+                                    <div>{{ date('d.m.Y', $timestamp) }}</div>
+                                    @can('timetracking_setany')
+                                        <div style="margin-left: auto">
+                                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}"
+                                                  onsubmit="submitForm(event, this)">
+                                                @csrf
+                                                <input type="hidden" name="day" value="{{ $timestamp }}">
+                                                <input type="hidden" name="user_id"
+                                                       value="{{ ($id ?? auth()->user()->id) }}">
+                                                <select class="form-select form-select-sm" name="status" required>
+                                                    <option selected disabled>Status</option>
+                                                    <option value="1">Normal</option>
+                                                    <option value="2">Feiertag</option>
+                                                    <option value="3">Urlaub</option>
+                                                    <option value="4">Krank</option>
+                                                    <option value="5">ÜB ABBAU</option>
+                                                </select>
+                                                <select class="form-select form-select-sm" name="time" required>
+                                                    <option selected disabled>Zeit</option>
+                                                    @for ($hours = 0; $hours <= 24; $hours++)
+                                                        @php $seconds = $hours * 3600; @endphp
+                                                        <option value="{{ $seconds }}">{{ $hours }}std</option>
+                                                    @endfor
+                                                </select>
+                                                <button type="submit" class="btn btn-primary btn-sm">Send</button>
+                                            </form>
+                                        </div>
+                                    @endcan
+                                </div>
+
+                                <div class="progress m-1" id="progress-{{ $timestamp }}">
+                                    @forelse($times as $Time)
+                                        <div
+                                            class="progress-bar progress-bar-striped {{ $cssClasses[$Time->status] ?? 'bg-primary' }}"
+                                            style="width: {{ ($Time->time_worked / 86400) * 100 }}%;" aria-valuenow="15"
+                                            aria-valuemin="0" aria-valuemax="100"
+                                            title="{{ $labels[$Time->status] ?? '' }}: {{ getZeit($Time->time_worked) }}">
+                                            <a href="{{ route('request.show', $Time->id) }}">{{ $labels[$Time->status] ?? '' }} {{ getZeit($Time->time_worked) }}</a>
+                                        </div>
+                                        <div class="progress-bar progress-bar-striped bg-light" role="progressbar"
+                                             style="width: 1%" aria-valuenow="15" aria-valuemin="0"
+                                             aria-valuemax="100"></div>
+                                    @empty
+                                        <div class="progress-bar bg-light" style="width: 100%" aria-valuenow="0"
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            Keine Einträge
+                                        </div>
+                                    @endforelse
+                                </div>
+                            @endforeach
+
                         </div>
-                        <div class="progress-bar progress-bar-striped bg-light" role="progressbar" style="width: 1%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                    @endforeach
-                </div>
-            @endfor
+                @endforeach
+            </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new bootstrap.Tab(document.querySelector('.nav-link.active')).show();
+        });
+    </script>
 
     <script>
         function submitForm(event, form) {

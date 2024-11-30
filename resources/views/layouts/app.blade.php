@@ -81,7 +81,8 @@
 
   <!-- Vendor JS Files -->
   <script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="/assets/vendor/jquery/jquery-3.7.1.min.js"></script>
+  <script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
   <script src="/assets/js/main.js"></script>
 
     @if($errors->any())

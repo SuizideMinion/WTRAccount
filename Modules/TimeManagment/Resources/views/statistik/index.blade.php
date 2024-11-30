@@ -91,7 +91,6 @@
     <div class="card">
         <div class="card-body">
             @php
-
                 $cssClasses = [
                 0 => 'bg-info',
                 1 => 'bg-info',
@@ -109,25 +108,28 @@
                 ];
             @endphp
 
-            @for($i = 0; $i <= $Times->count(); $i++)
+            @for ($i = 0; $i <= $Times->count(); $i++)
                 <div class="d-flex">
                     <div>{{ date('d.m.Y', strtotime("-{$i} days")) }}</div>
                     @can('timetracking_setany')
                         <div style="margin-left: auto">
-                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}">
+                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}" onsubmit="submitForm(event, this)">
                                 @csrf
                                 <input type="hidden" name="day" value="{{ strtotime("-{$i} days 00:00:00") }}">
                                 <input type="hidden" name="user_id" value="{{($id ?? auth()->user()->id)}}">
-                                <select class="form-select form-select-sm" name="status">
-                                    <option selected>Status</option>
+                                <select class="form-select form-select-sm" name="status" required>
+                                    <option selected disabled>Status</option>
+                                    <option value="1">Normal</option>
                                     <option value="2">Feiertag</option>
                                     <option value="3">Urlaub</option>
                                     <option value="4">Krank</option>
                                 </select>
-                                <select class="form-select form-select-sm" name="time">
-                                    <option selected>Zeit</option>
-                                    <option value="18000">5std</option>
-                                    <option value="28800">8std</option>
+                                <select class="form-select form-select-sm" name="time" required>
+                                    <option selected disabled>Zeit</option>
+                                    @for ($hours = 0; $hours <= 24; $hours++)
+                                        @php $seconds = $hours * 3600; @endphp
+                                        <option value="{{ $seconds }}">{{ $hours }}std</option>
+                                    @endfor
                                 </select>
                                 <button type="submit" class="btn btn-primary btn-sm">Send</button>
                             </form>
@@ -135,7 +137,7 @@
                     @endcan
                 </div>
 
-                <div class="progress m-1">
+                <div class="progress m-1" id="progress-{{ strtotime("-{$i} days 00:00:00") }}">
                     @foreach($Times->where('stamped', '<', strtotime("-{$i} days 24:00:00"))
                                     ->where('stamped_out', '>', strtotime("-{$i} days 00:00:00")) as $Time)
                         <div class="progress-bar progress-bar-striped {{ $cssClasses[$Time->status] ?? 'bg-primary' }}"
@@ -151,6 +153,52 @@
     </div>
 
     <script>
+        function submitForm(event, form) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const url = form.action;
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const dayValue = form.querySelector('input[name="day"]').value;
+                    const progressContainer = document.getElementById('progress-' + dayValue);
+
+                    if (progressContainer) {
+                        // Löschen bestehender Fortschritt
+                        progressContainer.innerHTML = '';
+
+                        // Bestimmen der passenden CSS-Klasse basierend auf dem Status
+                        const statusClasses = {
+                            2: 'bg-info',     // Beispiel: Feiertag
+                            3: 'bg-warning',  // Beispiel: Urlaub
+                            4: 'bg-danger'    // Beispiel: Krank
+                            // Weitere Klassenzuordnungen können hier hinzugefügt werden
+                        };
+                        const cssClass = statusClasses[data.status] || 'bg-primary';
+
+                        // Progressbar erstellen
+                        const progressBar = document.createElement('div');
+                        progressBar.className = `progress-bar ${cssClass}`;
+                        progressBar.style.width = `${(data.time_worked / 86400) * 100}%`;
+                        progressBar.textContent = `${data.time_worked / 3600} Stunden`;
+                        progressContainer.appendChild(progressBar);
+                    } else {
+                        console.error(`No progress container found for day value: ${dayValue}`);
+                    }
+
+                    calculateTotalOvertime(); // Überstunden neu berechnen
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
         function calculateTotalOvertime() {
             const rows = document.querySelectorAll('#timeTable tbody tr');
             let totalMinutes = 0;

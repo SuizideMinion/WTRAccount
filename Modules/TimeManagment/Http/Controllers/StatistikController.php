@@ -4,6 +4,7 @@ namespace Modules\TimeManagment\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserData;
+use http\Env\Response;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -51,7 +52,7 @@ class StatistikController extends Controller
 
         $tt->save();
 
-        return redirect()->back()->withErrors('Eingetragen');
+        return response()->json($tt);
     }
 
     /**

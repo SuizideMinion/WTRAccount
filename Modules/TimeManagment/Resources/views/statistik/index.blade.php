@@ -69,19 +69,20 @@
                         $workTime = $Times->where('stamped', '>=', $start)
                                           ->where('stamped_out', '<', $end)
                                           ->sum('time_worked');
-                        $sollstunden = $user->userData()['sollstunden.' . date('m.Y', $start)] ?? ($user->userData()['sollstunden'] ?? 160);
+                        $sollstunden = $user->userDataRelation['sollstunden.' . date('m.Y', $start)] ?? ($user->userDataRelation['sollstunden'] ?? 160);
                     @endphp
 
-                    @if($workTime == 0)
-                        @break
+                    {{--                    @if($workTime == 0)--}}
+                    {{--                        @break--}}
+                    {{--                    @endif--}}
+                    @if($workTime != 0)
+                        <tr>
+                            <th scope="row">{{ date('m.Y', $start) }}</th>
+                            <td>{{ getZeit($workTime) }}</td>
+                            <td>{{ $sollstunden }}</td>
+                            <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
+                        </tr>
                     @endif
-
-                    <tr>
-                        <th scope="row">{{ date('m.Y', $start) }}</th>
-                        <td>{{ getZeit($workTime) }}</td>
-                        <td>{{ $sollstunden }}</td>
-                        <td>{{ getZeit($workTime - $sollstunden * 60 * 60) }}</td>
-                    </tr>
                 @endfor
                 @if(isset($user->userData()['ueberStunden']))
                     <tr>
@@ -148,64 +149,64 @@
 
             <div class="tab-content" id="myTabContent">
                 @foreach($monthsData as $monthYear => $days)
-                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                             id="{{ str_replace(' ', '-', $monthYear) }}"
-                             role="tabpanel" aria-labelledby="tab-{{ str_replace(' ', '-', $monthYear) }}">
+                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                         id="{{ str_replace(' ', '-', $monthYear) }}"
+                         role="tabpanel" aria-labelledby="tab-{{ str_replace(' ', '-', $monthYear) }}">
 
-                            @foreach($days as $timestamp => $times)
-                                <div class="d-flex">
-                                    <div>{{ date('d.m.Y', $timestamp) }}</div>
-                                    @can('timetracking_setany')
-                                        <div style="margin-left: auto">
-                                            <form class="d-flex" method="POST" action="{{ route('statistik.store') }}"
-                                                  onsubmit="submitForm(event, this)">
-                                                @csrf
-                                                <input type="hidden" name="day" value="{{ $timestamp }}">
-                                                <input type="hidden" name="user_id"
-                                                       value="{{ ($id ?? auth()->user()->id) }}">
-                                                <select class="form-select form-select-sm" name="status" required>
-                                                    <option selected disabled>Status</option>
-                                                    <option value="1">Normal</option>
-                                                    <option value="2">Feiertag</option>
-                                                    <option value="3">Urlaub</option>
-                                                    <option value="4">Krank</option>
-                                                    <option value="5">ÜB ABBAU</option>
-                                                </select>
-                                                <select class="form-select form-select-sm" name="time" required>
-                                                    <option selected disabled>Zeit</option>
-                                                    @for ($hours = 0; $hours <= 24; $hours++)
-                                                        @php $seconds = $hours * 3600; @endphp
-                                                        <option value="{{ $seconds }}">{{ $hours }}std</option>
-                                                    @endfor
-                                                </select>
-                                                <button type="submit" class="btn btn-primary btn-sm">Send</button>
-                                            </form>
-                                        </div>
-                                    @endcan
-                                </div>
+                        @foreach($days as $timestamp => $times)
+                            <div class="d-flex">
+                                <div>{{ date('d.m.Y', $timestamp) }}</div>
+                                @can('timetracking_setany')
+                                    <div style="margin-left: auto">
+                                        <form class="d-flex" method="POST" action="{{ route('statistik.store') }}"
+                                              onsubmit="submitForm(event, this)">
+                                            @csrf
+                                            <input type="hidden" name="day" value="{{ $timestamp }}">
+                                            <input type="hidden" name="user_id"
+                                                   value="{{ ($id ?? auth()->user()->id) }}">
+                                            <select class="form-select form-select-sm" name="status" required>
+                                                <option selected disabled>Status</option>
+                                                <option value="1">Normal</option>
+                                                <option value="2">Feiertag</option>
+                                                <option value="3">Urlaub</option>
+                                                <option value="4">Krank</option>
+                                                <option value="5">ÜB ABBAU</option>
+                                            </select>
+                                            <select class="form-select form-select-sm" name="time" required>
+                                                <option selected disabled>Zeit</option>
+                                                @for ($hours = 0; $hours <= 24; $hours++)
+                                                    @php $seconds = $hours * 3600; @endphp
+                                                    <option value="{{ $seconds }}">{{ $hours }}std</option>
+                                                @endfor
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm">Send</button>
+                                        </form>
+                                    </div>
+                                @endcan
+                            </div>
 
-                                <div class="progress m-1" id="progress-{{ $timestamp }}">
-                                    @forelse($times as $Time)
-                                        <div
-                                            class="progress-bar progress-bar-striped {{ $cssClasses[$Time->status] ?? 'bg-primary' }}"
-                                            style="width: {{ ($Time->time_worked / 86400) * 100 }}%;" aria-valuenow="15"
-                                            aria-valuemin="0" aria-valuemax="100"
-                                            title="{{ $labels[$Time->status] ?? '' }}: {{ getZeit($Time->time_worked) }}">
-                                            <a href="{{ route('request.show', $Time->id) }}">{{ $labels[$Time->status] ?? '' }} {{ getZeit($Time->time_worked) }}</a>
-                                        </div>
-                                        <div class="progress-bar progress-bar-striped bg-light" role="progressbar"
-                                             style="width: 1%" aria-valuenow="15" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    @empty
-                                        <div class="progress-bar bg-light" style="width: 100%" aria-valuenow="0"
-                                             aria-valuemin="0" aria-valuemax="100">
-                                            Keine Einträge
-                                        </div>
-                                    @endforelse
-                                </div>
-                            @endforeach
+                            <div class="progress m-1" id="progress-{{ $timestamp }}">
+                                @forelse($times as $Time)
+                                    <div
+                                        class="progress-bar progress-bar-striped {{ $cssClasses[$Time->status] ?? 'bg-primary' }}"
+                                        style="width: {{ ($Time->time_worked / 86400) * 100 }}%;" aria-valuenow="15"
+                                        aria-valuemin="0" aria-valuemax="100"
+                                        title="{{ $labels[$Time->status] ?? '' }}: {{ getZeit($Time->time_worked) }}">
+                                        <a href="{{ route('request.show', $Time->id) }}">{{ $labels[$Time->status] ?? '' }} {{ getZeit($Time->time_worked) }}</a>
+                                    </div>
+                                    <div class="progress-bar progress-bar-striped bg-light" role="progressbar"
+                                         style="width: 1%" aria-valuenow="15" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                @empty
+                                    <div class="progress-bar bg-light" style="width: 100%" aria-valuenow="0"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        Keine Einträge
+                                    </div>
+                                @endforelse
+                            </div>
+                        @endforeach
 
-                        </div>
+                    </div>
                 @endforeach
             </div>
         </div>

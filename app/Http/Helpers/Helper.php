@@ -30,6 +30,11 @@ function getZeit($time, $format = 'hh:mm')
     return $getHours . (str_contains($format, 'mm') ? ':'.$getMins:'') . (str_contains($format, 'ss') ? ':'.$getSecs:'');
 }
 
+function monthBoundary($monthsAgo = 0, $type = 'start') {
+    $format = $type === 'end' ? 'Y-m-t' : 'Y-m-01';
+    return strtotime(date($format) . ' - ' . $monthsAgo . ' month');
+}
+
 function getShortName($name,){
     $names = explode(' ', $name);
     $last_name = array_pop($names);

@@ -13,12 +13,6 @@
 @endsection
 
 @section('content')
-    @php
-        function monthBoundary($monthsAgo = 0, $type = 'start') {
-            $format = $type === 'end' ? 'Y-m-t' : 'Y-m-01';
-            return strtotime(date($format) . ' - ' . $monthsAgo . ' month');
-        }
-    @endphp
 
     <div class="row">
         <div class="col-lg-6">
@@ -69,13 +63,10 @@
                         $workTime = $Times->where('stamped', '>=', $start)
                                           ->where('stamped_out', '<', $end)
                                           ->sum('time_worked');
-                        $sollstunden = $user->userDataRelation['sollstunden.' . date('m.Y', $start)] ?? ($user->userDataRelation['sollstunden'] ?? 160);
+                        $sollstunden = $userData['sollstunden.' . date('m.Y', $start)] ?? ($userData['sollstunden'] ?? 160);
                     @endphp
 
-                    {{--                    @if($workTime == 0)--}}
-                    {{--                        @break--}}
-                    {{--                    @endif--}}
-                    @if($workTime != 0)
+                    @if($workTime != 0 )
                         <tr>
                             <th scope="row">{{ date('m.Y', $start) }}</th>
                             <td>{{ getZeit($workTime) }}</td>

@@ -24,7 +24,25 @@ class StatistikController extends Controller
         $userDatasUrlaubstage = UserData::where('user_id', $id)->where('key', 'like', 'urlaubstage.%')->sum('value');
         $user = User::whereId($id)->first();
 
-        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage', 'userData'));
+        $cssClasses = [
+            0 => 'bg-info',
+            1 => 'bg-info',
+            2 => 'bg-success',
+            3 => 'bg-warning',
+            4 => 'bg-danger',
+            5 => 'bg-primary',
+        ];
+
+        $labels = [
+            0 => '',
+            1 => '',
+            2 => 'FEIERTAG',
+            3 => 'URLAUB',
+            4 => 'KRANK',
+            5 => 'UB Abbau',
+        ];
+
+        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage', 'userData', 'cssClasses', 'labels'));
     }
 
     /**
@@ -69,9 +87,22 @@ class StatistikController extends Controller
         $userDatasUrlaubstage = UserData::where('user_id', $id)->where('key', 'like', 'urlaubstage.%')->sum('value');
         $user = User::with('userDataRelation')->whereId($id)->first();
 
-//        dd($user->userDataLike('urlaubstage.%'));
+        $cssClasses = [
+            0 => 'bg-info',
+            1 => 'bg-info',
+            2 => 'bg-success',
+            3 => 'bg-warning',
+            4 => 'bg-danger',
+        ];
 
-        return view('timemanagment::statistik.index', compact('id', 'user', 'Times', 'userDatasUrlaubstage', 'userData'));
+        $labels = [
+            0 => '',
+            1 => '',
+            2 => 'FEIERTAG',
+            3 => 'URLAUB',
+            4 => 'KRANK',
+        ];
+        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage', 'userData', 'cssClasses', 'labels'));
     }
 
     /**

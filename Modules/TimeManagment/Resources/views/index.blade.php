@@ -26,11 +26,11 @@
                     <div class="d-grid gap-2 mt-3">
                         @if(!$activeTime)
                             <input type="hidden" name="stamped_in" value="1">
-                            <input type="hidden" name="user_id" value="{{ ($id ?? auth()->user()->id) }}">
+                            <input type="hidden" name="user_id" value="{{ ($user->id) }}">
                             <button class="btn btn-primary" type="submit">Einstempeln {{ (isset($user) ? 'für ' . $user->name:'')}}</button>
                         @else
                             <input type="hidden" name="stamped_in" value="0">
-                            <input type="hidden" name="user_id" value="{{ ($id ?? auth()->user()->id) }}">
+                            <input type="hidden" name="user_id" value="{{ ($user->id) }}">
                             <button class="btn btn-primary" type="submit">Ausstempeln {{ (isset($user) ? 'für ' . $user->name:'') }}</button>
                         @endif
                     </div>
@@ -55,10 +55,10 @@
                     <tbody>
                     @foreach($lastWorkings as $last)
                         <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
-{{--                            <th>{{ $last->user->name }}</th>--}}
                             <td data-sort="{{ $last->stamped }}">{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
-                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
-                            <td data-sort="{{ $last->time_worked }}">{{ getZeit($last->time_worked) }}</td>
+                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i",($last->stamped_out + strtotime("1970/1/1"))) }}</td>
+{{--                            {{ dd(getZeit(($last->time_worked != 0 ? $last->time_worked:( time() + 3600 - $last->stamped ))), $last->time_worked, $last->stamped_out, $last->stamped ) }}--}}
+                            <td data-sort="{{ $last->time_worked }}">{{ getZeit(($last->time_worked != 0 ? $last->time_worked:( time() + 3600  - $last->stamped ))) }}</td>
                         </tr>
                     @endforeach
                     </tbody>

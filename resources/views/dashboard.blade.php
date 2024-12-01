@@ -60,36 +60,39 @@
                 </form>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Änderungswünsche</h5>
+        @if($requestChance)
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Änderungswünsche</h5>
 
-                <!-- Dark Table -->
-                <table class="table datatable datatable-table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">von</th>
-                        <th scope="col">bis</th>
-                        <th scope="col">Zeit</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($requestChance as $last)
-                        <tr onclick="location.href='{{ route('request.show', $last->time_id) }}'">
-                            <th>{{ $last->user->name }}</th>
-                            <th>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</th>
-                            <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
-                            <td>{{ getZeit($last->stamped_out - $last->stamped) }}</td>
-
+                    <!-- Dark Table -->
+                    <table class="table datatable datatable-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">von</th>
+                            <th scope="col">bis</th>
+                            <th scope="col">Zeit</th>
+                            <th scope="col">Status</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <!-- End Dark Table -->
+                        </thead>
+                        <tbody>
+                        @foreach($requestChance as $last)
+                            <tr onclick="location.href='{{ route('request.show', $last->time_id) }}'">
+                                <th>{{ $last->user->name }}</th>
+                                <th>{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</th>
+                                <td>{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+                                <td>{{ getZeit($last->stamped_out - $last->stamped) }}</td>
+                                <td>{{ $labels[$last->time->status] }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <!-- End Dark Table -->
 
+                </div>
             </div>
-        </div>
+        @endif
     @endcan
 
     @can('dashboard.see.Times')
@@ -101,17 +104,11 @@
                 <table id="table" class="table datatable datatable-table">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">von</th>
-                        <th scope="col">bis</th>
-                        <th scope="col">Zeit</th>
-                        <th>*</th>
-                    </tr>
-                    <tr>
                         <th><input type="text" placeholder="Suche Name"/></th>
                         <th><input type="text" placeholder="Suche von"/></th>
                         <th><input type="text" placeholder="Suche bis"/></th>
                         <th><input type="text" placeholder="Suche Zeit"/></th>
+                        <th><input type="text" placeholder="Suche Status"/></th>
                         <th></th>
                     </tr>
                     </thead>
@@ -119,13 +116,14 @@
                     @foreach($lastWorkings as $last)
                         <tr data-id="{{ $last->id }}">
                             <th>{{ $last->user->name }}</th>
-                            <td data-sort="{{ $last->stamped }}">{{ date("d.m H:i", $last->stamped + strtotime("1970/1/1")) }}</td>
-                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i", $last->stamped_out + strtotime("1970/1/1")) }}</td>
+                            <td data-sort="{{ $last->stamped }}">{{ date("d.m.y H:i", $last->stamped + strtotime("1970/1/1")) }}</td>
+                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m.y H:i", $last->stamped_out + strtotime("1970/1/1")) }}</td>
                             <td data-sort="{{ $last->time_worked }}">{{ getZeit($last->time_worked) }}</td>
+                            <td>{{ $labels[$last->status] }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger delete-button">Löschen</button>
                                 <button onclick="location.href='{{ route('request.show', $last->id) }}'" type="button"
-                                        class="btn btn-danger">Editieren
+                                        class="btn btn-warning">Editieren
                                 </button>
                             </td>
                         </tr>

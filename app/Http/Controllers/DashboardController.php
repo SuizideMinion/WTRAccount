@@ -14,9 +14,18 @@ class DashboardController extends Controller
     public function index()
     {
         $lastWorkings = TimeTracking::with('user')->orderBy('stamped', 'DESC')->get();
-        $requestChance = RequestTimeChance::orderBy('created_at', 'DESC')->get();
+        $requestChance = RequestTimeChance::with('time')->orderBy('created_at', 'DESC')->get();
 
-        return view('dashboard', compact('lastWorkings', 'requestChance'));
+        $labels = [
+            0 => '',
+            1 => '',
+            2 => 'FEIERTAG',
+            3 => 'URLAUB',
+            4 => 'KRANK',
+            5 => 'UB Abbau',
+        ];
+
+        return view('dashboard', compact('lastWorkings', 'requestChance', 'labels'));
     }
 
     /**

@@ -15,6 +15,21 @@ function getTimeForStatistik($user_id, $from, $to)
 
 }
 
+function getUpcomingHolidays($year, $countryCode = 'DE') {
+    function filterBavarianHolidays($holidays) {
+        $filteredHolidays = array_filter($holidays, function($holiday) {
+            return $holiday['global'] || (isset($holiday['counties']) && in_array('DE-BY', $holiday['counties']));
+        });
+
+        return array_values($filteredHolidays);
+    }
+    $apiUrl = "https://date.nager.at/api/v2/PublicHolidays/{$year}/{$countryCode}";
+    $response = file_get_contents($apiUrl);
+    $holidays = json_decode($response, true);
+
+    return filterBavarianHolidays($holidays);
+}
+
 function Zeit()
 {
     return time() - 3600;

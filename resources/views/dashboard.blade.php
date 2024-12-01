@@ -52,12 +52,23 @@
                 <form action="{{ route('holiday.store') }}" method="post">
                     @csrf
                     <div class="form-row align-items-center d-flex">
-                        <label for="date" class="col-form-label w-100">Feiertag für alle Eintragen:</label>
+                        <p class="w-25">
+                            <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <label for="date" class="col-form-label">Feiertag für alle Eintragen:</label>
+                            </a>
+                        </p>
                         <input type="date" name="date" class="form-control"
                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                         <button type="submit" class="btn btn-primary">Speichern</button>
                     </div>
                 </form>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        @foreach(getUpcomingHolidays(2024) as $holiday)
+                            Feiertag: {{$holiday['localName']}} am {{ date('d.m.Y', strtotime($holiday['date'])) }} <br>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
         @if($requestChance)

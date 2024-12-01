@@ -94,13 +94,20 @@
                         <th scope="col">Zeit</th>
                         <th>*</th>
                     </tr>
+                    <tr>
+                        <th><input type="text" placeholder="Suche Name" /></th>
+                        <th><input type="text" placeholder="Suche von" /></th>
+                        <th><input type="text" placeholder="Suche bis" /></th>
+                        <th><input type="text" placeholder="Suche Zeit" /></th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
                     @foreach($lastWorkings as $last)
                         <tr data-id="{{ $last->id }}">
                             <th>{{ $last->user->name }}</th>
-                            <td data-sort="{{ $last->stamped }}">{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
-                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
+                            <td data-sort="{{ $last->stamped }}">{{ date("d.m H:i", $last->stamped + strtotime("1970/1/1")) }}</td>
+                            <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i", $last->stamped_out + strtotime("1970/1/1")) }}</td>
                             <td data-sort="{{ $last->time_worked }}">{{ getZeit($last->time_worked) }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger delete-button">Löschen</button>
@@ -126,12 +133,37 @@
     <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            // Initialisieren Sie DataTables
+        $(document).ready(function () {
             var table = $('#table').DataTable({
-                pageLength : 25,
-                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
-                order: [[1, 'desc']]
+                autoWidth: false,
+                paging: true,
+                pageLength: 100,
+                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                searching: true,
+                ordering: true,
+                order: [[0, 'desc']],
+                info: true,
+                responsive: true,
+                language: {
+                    search: "Suche:",
+                    lengthMenu: "Zeige _MENU_ Einträge",
+                    info: "Zeige Einträge _START_ bis _END_ von _TOTAL_",
+                    paginate: {
+                        first: "Erste",
+                        last: "Letzte",
+                        next: "Nächste",
+                        previous: "Vorherige"
+                    }
+                }
+            });
+
+            // Erstellung der Spaltensuche
+            $('#table thead tr:eq(1) th').each(function (i) {
+                $('input', this).on('keyup change', function () {
+                    if ($('#table').DataTable().column(i).search() !== this.value) {
+                        $('#table').DataTable().column(i).search(this.value).draw();
+                    }
+                });
             });
 
             // Verwenden Sie Event-Delegation für das "Löschen"-Button-Event
@@ -140,22 +172,20 @@
                 var id = row.data('id');
                 var url = '{{ route("timemanagment.destroy", ":id") }}'.replace(':id', id);
 
-                // if (confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?')) {
-                    $.ajax({
-                        url: url,
-                        type: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                        },
-                        success: function(response) {
-                            // Zeile aus der DataTable entfernen
-                            table.row(row).remove().draw();
-                        },
-                        error: function(xhr) {
-                            alert('Ein Fehler ist aufgetreten! Bitte versuchen Sie es erneut.');
-                        }
-                    });
-                // }
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        // Zeile aus der DataTable entfernen
+                        table.row(row).remove().draw();
+                    },
+                    error: function(xhr) {
+                        alert('Ein Fehler ist aufgetreten! Bitte versuchen Sie es erneut.');
+                    }
+                });
             });
         });
     </script>

@@ -16,7 +16,7 @@ class HolidayController extends Controller
         $Users = User::with('userDataRelation')->get();
 
         foreach($Users as $User) {
-            $timeWorked = (($User->userDataRelation->pluck('value', 'key')['normalStunden'] ?? 8) * 60) * 60;
+            $timeWorked = (($User->userDataRelation->pluck('value', 'key')['holidayStunden'] ?? 8) * 60) * 60;
             $stampedOut = $time + $timeWorked;
 
             if (env('APP_DEBUG', false)) {

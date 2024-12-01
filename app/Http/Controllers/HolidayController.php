@@ -19,25 +19,13 @@ class HolidayController extends Controller
             $timeWorked = (($User->userDataRelation->pluck('value', 'key')['holidayStunden'] ?? 8) * 60) * 60;
             $stampedOut = $time + $timeWorked;
 
-            if (env('APP_DEBUG', false)) {
-                // Simulieren und ausgeben
-                Log::info('Simulierte Eintragung für User:', [
-                    'user_id' => $User->id,
-                    'stamped' => $time,
-                    'stamped_out' => $stampedOut,
-                    'time_worked' => $timeWorked,
-                    'status' => '2'
-                ]);
-            } else {
-                // Tatsächliche Eintragung
-                TimeTracking::create([
-                    'user_id' => $User->id,
-                    'stamped' => $time,
-                    'stamped_out' => $stampedOut,
-                    'time_worked' => $timeWorked,
-                    'status' => '2'
-                ]);
-            }
+            TimeTracking::create([
+                'user_id' => $User->id,
+                'stamped' => $time,
+                'stamped_out' => $stampedOut,
+                'time_worked' => $timeWorked,
+                'status' => '2'
+            ]);
         }
     }
 }

@@ -40,6 +40,7 @@ Route::get('/logout', function () {
 })->name('logout');
 
 Route::resource('dashboard', \App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified']);
+Route::resource('holiday', \App\Http\Controllers\HolidayController::class)->middleware(['auth', 'verified']);
 
 Route::get('json', [\App\Http\Controllers\JSONController::class, 'json'])->name('json');
 

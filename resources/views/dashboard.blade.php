@@ -49,6 +49,19 @@
     @can('timeChanceAccept')
         <div class="card">
             <div class="card-body">
+                <form action="{{ route('holiday.store') }}" method="post">
+                    @csrf
+                    <div class="form-row align-items-center d-flex">
+                        <label for="date" class="col-form-label w-100">Feiertag für alle Eintragen:</label>
+                        <input type="date" name="date" class="form-control"
+                               value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                        <button type="submit" class="btn btn-primary">Speichern</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
                 <h5 class="card-title">Änderungswünsche</h5>
 
                 <!-- Dark Table -->
@@ -95,10 +108,10 @@
                         <th>*</th>
                     </tr>
                     <tr>
-                        <th><input type="text" placeholder="Suche Name" /></th>
-                        <th><input type="text" placeholder="Suche von" /></th>
-                        <th><input type="text" placeholder="Suche bis" /></th>
-                        <th><input type="text" placeholder="Suche Zeit" /></th>
+                        <th><input type="text" placeholder="Suche Name"/></th>
+                        <th><input type="text" placeholder="Suche von"/></th>
+                        <th><input type="text" placeholder="Suche bis"/></th>
+                        <th><input type="text" placeholder="Suche Zeit"/></th>
                         <th></th>
                     </tr>
                     </thead>
@@ -111,7 +124,9 @@
                             <td data-sort="{{ $last->time_worked }}">{{ getZeit($last->time_worked) }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger delete-button">Löschen</button>
-                                <button onclick="location.href='{{ route('request.show', $last->id) }}'" type="button" class="btn btn-danger">Editieren</button>
+                                <button onclick="location.href='{{ route('request.show', $last->id) }}'" type="button"
+                                        class="btn btn-danger">Editieren
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -167,7 +182,7 @@
             });
 
             // Verwenden Sie Event-Delegation für das "Löschen"-Button-Event
-            $('#table tbody').on('click', '.delete-button', function() {
+            $('#table tbody').on('click', '.delete-button', function () {
                 var row = $(this).closest('tr');
                 var id = row.data('id');
                 var url = '{{ route("timemanagment.destroy", ":id") }}'.replace(':id', id);
@@ -178,11 +193,11 @@
                     data: {
                         _token: '{{ csrf_token() }}',
                     },
-                    success: function(response) {
+                    success: function (response) {
                         // Zeile aus der DataTable entfernen
                         table.row(row).remove().draw();
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         alert('Ein Fehler ist aufgetreten! Bitte versuchen Sie es erneut.');
                     }
                 });

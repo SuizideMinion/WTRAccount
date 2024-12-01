@@ -141,7 +141,7 @@
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 searching: true,
                 ordering: true,
-                order: [[0, 'desc']],
+                order: [[1, 'desc']],
                 info: true,
                 responsive: true,
                 language: {

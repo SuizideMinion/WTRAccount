@@ -64,7 +64,7 @@
                 </form>
                 <div class="collapse" id="collapseExample">
                     <div class="card card-body">
-                        @foreach(getUpcomingHolidays(2024) as $holiday)
+                        @foreach(getUpcomingHolidays(date('Y')) as $holiday)
                             Feiertag: {{$holiday['localName']}} am {{ date('d.m.Y', strtotime($holiday['date'])) }} <br>
                         @endforeach
                     </div>

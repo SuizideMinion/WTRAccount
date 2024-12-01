@@ -54,18 +54,13 @@ class StatistikController extends Controller
         return view('timemanagment::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         $tt = new TimeTracking;
 
         $tt->user_id = $request->user_id;
-        $tt->stamped = $request->day;
-        $tt->stamped_out = $request->day + $request->time;
+        $tt->stamped = $request->day + 3600;
+        $tt->stamped_out = $request->day + $request->time + 3600;
         $tt->status = $request->status;
         $tt->time_worked = $request->time;
 
@@ -74,11 +69,6 @@ class StatistikController extends Controller
         return response()->json($tt);
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
         $Times = TimeTracking::where('user_id', $id)->get();

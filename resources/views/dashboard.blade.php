@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('styles')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
 @endsection
 
 @section('module')
@@ -93,15 +92,20 @@
                         <th scope="col">von</th>
                         <th scope="col">bis</th>
                         <th scope="col">Zeit</th>
+                        <th>*</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($lastWorkings as $last)
-                        <tr onclick="location.href='{{ route('request.show', $last->id) }}'">
+                        <tr data-id="{{ $last->id }}">
                             <th>{{ $last->user->name }}</th>
                             <td data-sort="{{ $last->stamped }}">{{ date("d.m H:i",$last->stamped + strtotime("1970/1/1")) }}</td>
                             <td data-sort="{{ $last->stamped_out }}">{{ date("d.m H:i",$last->stamped_out + strtotime("1970/1/1")) }}</td>
                             <td data-sort="{{ $last->time_worked }}">{{ getZeit($last->time_worked) }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger delete-button">Löschen</button>
+                                <button onclick="location.href='{{ route('request.show', $last->id) }}'" type="button" class="btn btn-danger">Editieren</button>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -122,13 +126,37 @@
     <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
 
     <script type="text/javascript">
-        $(function () {
-            $('#table').DataTable({
+        $(document).ready(function() {
+            // Initialisieren Sie DataTables
+            var table = $('#table').DataTable({
                 pageLength : 25,
                 lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 order: [[1, 'desc']]
-            })
-        });
+            });
 
+            // Verwenden Sie Event-Delegation für das "Löschen"-Button-Event
+            $('#table tbody').on('click', '.delete-button', function() {
+                var row = $(this).closest('tr');
+                var id = row.data('id');
+                var url = '{{ route("timemanagment.destroy", ":id") }}'.replace(':id', id);
+
+                // if (confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?')) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            // Zeile aus der DataTable entfernen
+                            table.row(row).remove().draw();
+                        },
+                        error: function(xhr) {
+                            alert('Ein Fehler ist aufgetreten! Bitte versuchen Sie es erneut.');
+                        }
+                    });
+                // }
+            });
+        });
     </script>
 @endsection

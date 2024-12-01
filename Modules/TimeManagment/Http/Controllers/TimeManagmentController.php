@@ -106,7 +106,7 @@ class TimeManagmentController extends Controller
     {
         TimeTracking::where('id', $id)->delete();
         RequestTimeChance::where('time_id', $id)->delete();
-
+        if($_POST['json'] = 1) return response()->json(['success' => true]);
         return Redirect::route('timemanagment.index');
     }
 }

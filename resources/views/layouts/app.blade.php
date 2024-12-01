@@ -26,6 +26,9 @@
   <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
+  <script src="/assets/vendor/jquery/jquery-3.7.1.min.js"></script>
+  <link href="/assets/vendor/jquery/css/datatables.css" rel="stylesheet">
+
   <!-- Template Main CSS File -->
   <link href="/assets/css/style.css" rel="stylesheet">
     @yield('styles')
@@ -82,6 +85,7 @@
   <!-- Vendor JS Files -->
   <script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="/assets/vendor/jquery/datatables.js"></script>
   <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
   <script src="/assets/js/main.js"></script>
 

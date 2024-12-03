@@ -2,6 +2,7 @@
 
 namespace Modules\TimeManagment\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -40,6 +41,7 @@ class RequestTimeChanceController extends Controller
         $time = TimeTracking::where('id', $request->time_id)->first();
 
         $time->stamped = $request->stamped;
+        $time->user_id = $request->user_id;
         $time->stamped_out = $request->stamped_out;
         $time->time_worked = $request->stamped_out - $request->stamped;
 
@@ -56,11 +58,13 @@ class RequestTimeChanceController extends Controller
      */
     public function show($id)
     {
-        $time = TimeTracking::where('id', $id)->first();
+        $time = TimeTracking::with('user')->where('id', $id)->first();
+
+        $users = User::get();
 
         $timeChances = RequestTimeChance::where('time_id', $id)->get();
 
-        return view('timemanagment::requesttimechance.show', compact('time', 'timeChances'));
+        return view('timemanagment::requesttimechance.show', compact('time', 'timeChances', 'users'));
     }
 
     /**

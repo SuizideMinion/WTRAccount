@@ -55,10 +55,24 @@
                         <td>Stunden</td>
                         <td>{{ getZeit($time->time_worked) }}</td>
                     </tr>
+                    @can('timeChanceAccept')
+                    <tr>
+                        <td>Arbeiter</td>
+                        <td>
+                            <select name="user_id">
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}" {{ $user->id == $time->user_id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    @endcan
                     <tr>
                         <td></td>
                         <td>
-                            <input type="hidden" name="user_id" value="{{ $time->user_id }}">
+{{--                            <input type="hidden" name="user_id" value="{{ $time->user_id }}">--}}
                             <button type="submit" class="btn btn-primary">Senden</button>
                         </td>
                     </tr>

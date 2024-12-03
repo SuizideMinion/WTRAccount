@@ -23,7 +23,7 @@ function getUpcomingHolidays($year, $countryCode = 'DE') {
 
         return array_values($filteredHolidays);
     }
-    $apiUrl = "https://date.nager.at/api/v2/PublicHolidays/{$year}/{$countryCode}";
+    $apiUrl = "https://date.nager.at/api/v3/PublicHolidays/{$year}/{$countryCode}";
     $response = file_get_contents($apiUrl);
     $holidays = json_decode($response, true);
 

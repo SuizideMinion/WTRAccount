@@ -1,5 +1,14 @@
 @extends('user::layouts.master')
 
+@section('styles')
+    <style>
+        .bi {
+            margin-right: 5px;
+            font-size: large;
+        }
+    </style>
+@endsection
+
 @section('breadclumbs')
     <div class="pagetitle">
         <h1>Mitglieder</h1>
@@ -59,7 +68,6 @@
 
                                         </td>
                                         <td class="d-flex">
-                                            @csrf
                                             <a href="{{ route('userdata.show', $User->id) }}"
                                                title="UserDaten Bearbeiten"><i
                                                     class="bi bi-wrench"></i></a>
@@ -74,9 +82,10 @@
                                                     class="bi bi-clock-fill"></i></a>
                                             <a href="{{ route('user.edit', $User->id) }}"
                                                title="User Bearbeiten"><i
-                                                    class="bi bi-person-add"></i></a>
+                                                    class="bi bi-pen-fill"></i></a>
 
                                             <form method="POST" action="{{ route('timemanagment.store') }}">
+                                                @csrf
                                                 @if( $User->userAktive() == false )
                                                     <input type="hidden" name="stamped_in" value="1">
                                                     <input type="hidden" name="user_id"

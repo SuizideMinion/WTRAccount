@@ -42,7 +42,7 @@ class StatistikController extends Controller
             5 => 'UB Abbau',
         ];
 
-        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage', 'userData', 'cssClasses', 'labels'));
+        return view('timemanagment::statistik.index', compact('id', 'Times', 'user', 'userDatasUrlaubstage', 'userData', 'cssClasses', 'labels'));
     }
 
     /**
@@ -92,7 +92,7 @@ class StatistikController extends Controller
             3 => 'URLAUB',
             4 => 'KRANK',
         ];
-        return view('timemanagment::statistik.index', compact('Times', 'user', 'userDatasUrlaubstage', 'userData', 'cssClasses', 'labels'));
+        return view('timemanagment::statistik.index', compact('id', 'Times', 'user', 'userDatasUrlaubstage', 'userData', 'cssClasses', 'labels'));
     }
 
     /**

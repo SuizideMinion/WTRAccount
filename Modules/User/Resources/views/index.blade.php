@@ -58,22 +58,25 @@
                                             {{ getZeit($User->getWorktime(strtotime(date('Y-m-01')), strtotime(date('Y-m-t')) + 24 * 60 * 60)) }}
 
                                         </td>
-                                        <td>
-                                            <form method="POST" action="{{ route('timemanagment.store') }}">
-                                                @csrf
-                                                <a href="{{ route('userdata.show', $User->id) }}"
-                                                   title="UserDaten Bearbeiten"><i
-                                                        class="bi bi-wrench"></i></a>
-                                                <a href="{{ route('userpermission.show', $User->id) }}"
-                                                   title="UserPermissions Bearbeiten"><i
-                                                        class="bi bi-folder-check"></i></a>
-                                                <a href="{{ route('statistik.show', $User->id) }}"
-                                                   title="Statistik Anschauen"><i
-                                                        class="bi bi-calendar-date"></i></a>
-                                                <a href="{{ route('timemanagment.show', $User->id) }}"
-                                                   title="Stempelseite Anschauen"><i
-                                                        class="bi bi-clock-fill"></i></a>
+                                        <td class="d-flex">
+                                            @csrf
+                                            <a href="{{ route('userdata.show', $User->id) }}"
+                                               title="UserDaten Bearbeiten"><i
+                                                    class="bi bi-wrench"></i></a>
+                                            <a href="{{ route('userpermission.show', $User->id) }}"
+                                               title="UserPermissions Bearbeiten"><i
+                                                    class="bi bi-folder-check"></i></a>
+                                            <a href="{{ route('statistik.show', $User->id) }}"
+                                               title="Statistik Anschauen"><i
+                                                    class="bi bi-calendar-date"></i></a>
+                                            <a href="{{ route('timemanagment.show', $User->id) }}"
+                                               title="Stempelseite Anschauen"><i
+                                                    class="bi bi-clock-fill"></i></a>
+                                            <a href="{{ route('user.edit', $User->id) }}"
+                                               title="User Bearbeiten"><i
+                                                    class="bi bi-person-add"></i></a>
 
+                                            <form method="POST" action="{{ route('timemanagment.store') }}">
                                                 @if( $User->userAktive() == false )
                                                     <input type="hidden" name="stamped_in" value="1">
                                                     <input type="hidden" name="user_id"
@@ -84,15 +87,15 @@
                                                         type="submit"><i class="bi bi-person-check"></i></button>
                                                 @else
                                                     <input type="hidden" name="stamped_in" value="0">
-                                                    <input type="hidden" name="user_id"
-                                                           value="{{ $User->id }}">
+                                                    <input type="hidden" name="user_id" value="{{ $User->id }}">
                                                     <button
                                                         style="background:none;border:none;margin:0;padding:0;cursor: pointer;"
                                                         title="Ausstempeln"
-                                                        type="submit"><i class="bi bi-person-dash-fill"></i></button>
-                                            @endif
+                                                        type="submit"><i class="bi bi-person-dash-fill"></i>
+                                                    </button>
+                                                @endif
+                                            </form>
                                         </td>
-                                        </form>
                                         {{--                                        TODO:: in der Arbeit usw machen --}}
                                         {{--                                        {{dd($User->userAktive())}}--}}
                                         @if( $User->userAktive() == false )

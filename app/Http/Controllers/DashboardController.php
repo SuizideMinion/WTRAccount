@@ -13,6 +13,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        if ( !can('timeChanceAccept') ) return redirect()->route('timemanagment.index');
+
         $lastWorkings = TimeTracking::with('user')->orderBy('stamped', 'DESC')->get();
         $requestChance = RequestTimeChance::with('time')->orderBy('created_at', 'DESC')->get();
 

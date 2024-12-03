@@ -15,6 +15,21 @@ function getTimeForStatistik($user_id, $from, $to)
 
 }
 
+function can($value)
+{
+    if (auth()->check()) {
+        $user = auth()->user();
+        if (session()->has('user_permissions')) {
+            $permissions = session('user_permissions');
+        } else {
+            $permissions = $user->userPermission();
+            session(['user_permissions' => $permissions]);
+        }
+
+        return isset($permissions[$value]) || isset($permissions['*']);
+    } return false;
+}
+
 function getUpcomingHolidays($year, $countryCode = 'DE') {
     function filterBavarianHolidays($holidays) {
         $filteredHolidays = array_filter($holidays, function($holiday) {
@@ -50,7 +65,7 @@ function monthBoundary($monthsAgo = 0, $type = 'start') {
     return strtotime(date($format) . ' - ' . $monthsAgo . ' month');
 }
 
-function getShortName($name,){
+function getShortName($name){
     $names = explode(' ', $name);
     $last_name = array_pop($names);
     $last_initial = $last_name[0];

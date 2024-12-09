@@ -103,7 +103,7 @@ class RequestTimeChanceController extends Controller
             ) + 3600;
 
         $time = new RequestTimeChance;
-        $time->user_id = $request->user_id;
+        $time->user_id = ($request->user_id ?? auth()->id());
         $time->time_id = $id;
         $time->stamped = $stamped;
         $time->stamped_out = $stamped_out;
